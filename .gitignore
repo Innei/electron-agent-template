@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-main/
+dist-preload/
+release/
+*.tsbuildinfo
+apps/desktop/native/sparkle-bridge/vendor/
+apps/desktop/native/sparkle-bridge/build/
+apps/desktop/native/sparkle-bridge/*.node
+data/
+.env

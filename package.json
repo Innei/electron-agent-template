@@ -1,0 +1,22 @@
+{
+  "name": "app-template",
+  "private": true,
+  "packageManager": "pnpm@11.10.0",
+  "scripts": {
+    "dev": "concurrently -n web,server -c blue,green \"pnpm --filter @app/web dev\" \"pnpm --filter @app/server dev\"",
+    "dev:desktop": "concurrently --kill-others -n web,desktop -c blue,magenta \"pnpm --filter @app/web dev\" \"pnpm --filter @app/desktop dev\"",
+    "start": "pnpm --filter @app/server start",
+    "start:desktop": "pnpm --filter @app/web build && pnpm --filter @app/desktop start",
+    "build": "pnpm --filter @app/web build",
+    "build:desktop": "pnpm --filter @app/desktop build",
+    "package:desktop": "pnpm --filter @app/desktop package",
+    "release:desktop:dry-run": "apps/desktop/scripts/release-dry-run.sh",
+    "test": "pnpm -r test",
+    "test:desktop": "pnpm --filter @app/desktop test",
+    "typecheck": "pnpm -r typecheck",
+    "typecheck:desktop": "pnpm --filter @app/desktop typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

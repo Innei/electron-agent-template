@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="App icon">
+  <rect width="512" height="512" rx="112" fill="#0F172A"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="#E2E8F0" stroke-opacity="0.35" stroke-width="24"/>
+  <circle cx="256" cy="256" r="44" fill="#38BDF8"/>
+</svg>
