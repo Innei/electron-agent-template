@@ -1,4 +1,5 @@
 import { ArrowBigUp, Command, CornerDownLeft, type LucideIcon } from "lucide-react";
+import * as s from "./Kbd.css";
 
 export type KbdKey = "mod" | "shift" | "enter" | (string & {});
 
@@ -26,7 +27,7 @@ export function Kbd({ keys, className }: KbdProps) {
   });
 
   return (
-    <kbd className={`ui-kbd${className ? ` ${className}` : ""}`} aria-label={labels.join("+")}>
+    <kbd className={[s.root, className].filter(Boolean).join(" ")} aria-label={labels.join("+")}>
       {keys.map((key, index) => {
         const iconKey = key === "mod" && apple ? COMMAND_KEY : ICON_KEYS[key];
         if (iconKey) {

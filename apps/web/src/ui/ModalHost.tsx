@@ -1,5 +1,6 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { X } from "lucide-react";
+import * as s from "./Modal.css";
 import { closeModal, getSnapshot, subscribe, type ModalEntry } from "./modalStore";
 import { ScrollArea } from "./ScrollArea";
 
@@ -19,24 +20,24 @@ function ModalFrame({ entry }: { entry: ModalEntry }) {
     typeof entry.headerAction === "function" ? entry.headerAction(close) : entry.headerAction;
 
   return (
-    <div className="modal-backdrop" data-state={entry.state} onClick={close}>
+    <div className={s.backdrop} data-state={entry.state} onClick={close}>
       <div
-        className="modal-panel"
+        className={s.panel}
         data-state={entry.state}
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-head">
-          <span className="modal-title">{entry.title}</span>
-          <div className="modal-head-actions">
+        <div className={s.head}>
+          <span className={s.title}>{entry.title}</span>
+          <div className={s.headActions}>
             {headerAction}
-            <button type="button" className="modal-close" onClick={close} aria-label="Close">
+            <button type="button" className={s.close} onClick={close} aria-label="Close">
               <X size={16} />
             </button>
           </div>
         </div>
-        <ScrollArea className="modal-body" contentClassName="modal-body-content">
+        <ScrollArea className={s.body} contentClassName={s.bodyContent}>
           {body}
         </ScrollArea>
       </div>

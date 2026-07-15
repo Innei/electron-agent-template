@@ -315,6 +315,7 @@ export function ProviderCredentialsSection({
         {availableToAdd.length > 0 ? (
           <div className="settings-provider-add">
             <Select
+              className="settings-provider-add-select"
               value={effectiveAddProvider}
               options={availableToAdd.map((provider) => ({ value: provider.id, label: provider.name }))}
               onChange={setAddProvider}

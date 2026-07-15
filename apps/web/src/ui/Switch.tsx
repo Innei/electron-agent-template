@@ -1,4 +1,5 @@
 import { Switch as BaseSwitch } from "@base-ui/react/switch";
+import * as s from "./Switch.css";
 
 export function Switch({
   checked,
@@ -16,10 +17,10 @@ export function Switch({
       aria-label={ariaLabel}
       checked={checked}
       disabled={disabled}
-      className="ui-switch"
+      className={s.root}
       onCheckedChange={onCheckedChange}
     >
-      <BaseSwitch.Thumb className="ui-switch-thumb" />
+      <BaseSwitch.Thumb className={s.thumb} />
     </BaseSwitch.Root>
   );
 }

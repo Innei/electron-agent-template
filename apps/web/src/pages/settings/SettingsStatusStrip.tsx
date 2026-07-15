@@ -1,3 +1,4 @@
+import { root as numStyle } from "../../ui/Num.css";
 import type { SettingsViewModel } from "./settingsViewModel";
 
 type Summary = SettingsViewModel["summary"];
@@ -18,7 +19,7 @@ export function SettingsStatusStrip({
       </span>
       <span className="settings-statusline-sep">·</span>
       <span>{summary.enabledLabel}</span>
-      <span className="settings-statusline-usage num">
+      <span className={`settings-statusline-usage ${numStyle}`}>
         {usageError ? (
           <>
             Failed to load today's usage

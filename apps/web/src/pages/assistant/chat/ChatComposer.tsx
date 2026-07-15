@@ -9,6 +9,7 @@ import type {
   Ref,
 } from "react";
 import { Button, Input } from "../../../ui";
+import { root as inputStyle } from "../../../ui/Input.css";
 
 type ChatComposerFieldElement = HTMLInputElement | HTMLTextAreaElement;
 
@@ -80,7 +81,7 @@ export function ChatComposer({
         {multiline ? (
           <textarea
             ref={textareaRef}
-            className="input chat-composer-field chat-composer-field--multiline"
+            className={`${inputStyle} chat-composer-field chat-composer-field--multiline`}
             rows={1}
             aria-label={placeholder}
             autoComplete="off"

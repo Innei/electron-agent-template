@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from "react";
+import * as s from "./Dot.css";
 
 type DotProps = {
   tone?: "accent" | "ok" | "up" | "down";
@@ -6,7 +7,9 @@ type DotProps = {
 } & HTMLAttributes<HTMLSpanElement>;
 
 export function Dot({ tone, pulse, className, ...rest }: DotProps) {
-  const cls = `dot${tone ? ` dot--${tone}` : ""}${pulse ? " dot--pulse" : ""}${className ? ` ${className}` : ""}`;
+  const cls = [s.root, tone ? s.tone[tone] : null, pulse ? s.pulse : null, className]
+    .filter(Boolean)
+    .join(" ");
 
   return <span className={cls} {...rest} />;
 }

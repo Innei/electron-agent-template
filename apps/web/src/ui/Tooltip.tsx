@@ -1,5 +1,6 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import type { ReactNode } from "react";
+import * as s from "./Tooltip.css";
 
 type TooltipPlacement = "top" | "bottom";
 
@@ -32,7 +33,7 @@ export function Tooltip({
         delay={100}
         render={
           <span
-            className={`tooltip-anchor${className ? ` ${className}` : ""}`}
+            className={[s.anchor, className].filter(Boolean).join(" ")}
             tabIndex={focusable ? 0 : undefined}
           />
         }
@@ -40,8 +41,8 @@ export function Tooltip({
         {children}
       </BaseTooltip.Trigger>
       <BaseTooltip.Portal>
-        <BaseTooltip.Positioner className="tooltip-positioner" side={placement} sideOffset={8}>
-          <BaseTooltip.Popup className="tooltip-panel">{content}</BaseTooltip.Popup>
+        <BaseTooltip.Positioner className={s.positioner} side={placement} sideOffset={8}>
+          <BaseTooltip.Popup className={s.panel}>{content}</BaseTooltip.Popup>
         </BaseTooltip.Positioner>
       </BaseTooltip.Portal>
     </BaseTooltip.Root>

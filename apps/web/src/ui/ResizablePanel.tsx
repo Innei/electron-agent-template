@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import * as s from "./ResizablePanel.css";
 
 export type ResizablePanelSide = "start" | "end";
 
@@ -166,7 +167,9 @@ export function ResizablePanel({
   const resetSize = () => updateSize(initialSizeRef.current, true);
   const handle = (
     <div
-      className={`resize-panel-handle${dragging ? " dragging" : ""}`}
+      className={s.handle}
+      data-dragging={dragging || undefined}
+      data-resize-handle=""
       role="separator"
       aria-label={handleLabel}
       aria-orientation="vertical"
@@ -186,12 +189,14 @@ export function ResizablePanel({
   const style = { width: size, minWidth: minSize, maxWidth: maxSize } satisfies CSSProperties;
 
   return (
-    <div
-      className={`resize-panel resize-panel--${side}${dragging ? " resize-panel--dragging" : ""}${className ? ` ${className}` : ""}`}
-      style={style}
-    >
+    <div className={[s.root, className].filter(Boolean).join(" ")} style={style} data-side={side}>
       {side === "end" ? handle : null}
-      <div className={`resize-panel-content${contentClassName ? ` ${contentClassName}` : ""}`}>{children}</div>
+      <div
+        className={[s.content, contentClassName].filter(Boolean).join(" ")}
+        data-resize-content=""
+      >
+        {children}
+      </div>
       {side === "start" ? handle : null}
     </div>
   );

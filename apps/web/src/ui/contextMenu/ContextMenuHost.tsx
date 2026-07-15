@@ -1,6 +1,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { ContextMenu } from "@base-ui/react/context-menu";
 import { resolveShortcutDisplay } from "./accelerator";
+import * as s from "./ContextMenu.css";
 import {
   hasContextMenuSubmenu,
   isContextMenuDivider,
@@ -38,13 +39,13 @@ export function ContextMenuHost() {
     >
       <ContextMenu.Portal>
         <ContextMenu.Positioner
-          className="ui-context-menu-positioner"
+          className={s.positioner}
           anchor={state.anchor ?? undefined}
           side="bottom"
           align="start"
           sideOffset={2}
         >
-          <ContextMenu.Popup className="ui-context-menu-popup">
+          <ContextMenu.Popup className={s.popup}>
             {state.items.map((item, i) => (
               <MenuNode key={itemKey(item, i)} item={item} index={i} />
             ))}
@@ -59,30 +60,30 @@ function MenuNode({ item, index }: { item: ContextMenuItem; index: number }) {
   if (item.visible === false) return null;
 
   if (isContextMenuDivider(item)) {
-    return <ContextMenu.Separator className="ui-context-menu-separator" />;
+    return <ContextMenu.Separator className={s.separator} />;
   }
 
   if (hasContextMenuSubmenu(item)) {
     return (
       <ContextMenu.SubmenuRoot>
         <ContextMenu.SubmenuTrigger
-          className="ui-context-menu-item ui-context-menu-submenu-trigger"
+          className={[s.item, s.submenuTrigger].join(" ")}
           disabled={item.disabled}
         >
-          {item.icon ? <span className="ui-context-menu-item-icon">{item.icon}</span> : null}
-          <span className="ui-context-menu-item-label">{item.label}</span>
-          <span className="ui-context-menu-submenu-chevron" aria-hidden>
+          {item.icon ? <span className={s.itemIcon}>{item.icon}</span> : null}
+          <span className={s.itemLabel}>{item.label}</span>
+          <span className={s.submenuChevron} aria-hidden>
             ›
           </span>
         </ContextMenu.SubmenuTrigger>
         <ContextMenu.Portal>
           <ContextMenu.Positioner
-            className="ui-context-menu-positioner"
+            className={s.positioner}
             side="right"
             align="start"
             sideOffset={4}
           >
-            <ContextMenu.Popup className="ui-context-menu-popup">
+            <ContextMenu.Popup className={s.popup}>
               {item.submenu.map((child, i) => (
                 <MenuNode key={itemKey(child, i)} item={child} index={i} />
               ))}
@@ -96,13 +97,13 @@ function MenuNode({ item, index }: { item: ContextMenuItem; index: number }) {
   const shortcut = resolveShortcutDisplay(item);
   return (
     <ContextMenu.Item
-      className={`ui-context-menu-item${item.danger ? " ui-context-menu-item--danger" : ""}`}
+      className={[s.item, item.danger ? s.itemDanger : null].filter(Boolean).join(" ")}
       disabled={item.disabled}
       onClick={() => item.onClick?.()}
     >
-      {item.icon ? <span className="ui-context-menu-item-icon">{item.icon}</span> : null}
-      <span className="ui-context-menu-item-label">{item.label}</span>
-      {shortcut ? <span className="ui-context-menu-item-shortcut">{shortcut}</span> : null}
+      {item.icon ? <span className={s.itemIcon}>{item.icon}</span> : null}
+      <span className={s.itemLabel}>{item.label}</span>
+      {shortcut ? <span className={s.itemShortcut}>{shortcut}</span> : null}
     </ContextMenu.Item>
   );
 }

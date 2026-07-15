@@ -1,4 +1,5 @@
 import { useId, type ReactNode } from "react";
+import * as s from "./SegmentedControl.css";
 
 export interface SegmentedControlOption<Value extends string> {
   label: ReactNode;
@@ -21,12 +22,12 @@ export function SegmentedControl<Value extends string>({
   value,
 }: SegmentedControlProps<Value>) {
   const name = useId();
-  const classes = `ui-segmented-control${className ? ` ${className}` : ""}`;
+  const classes = [s.root, className].filter(Boolean).join(" ");
 
   return (
     <div className={classes} role="radiogroup" aria-label={ariaLabel}>
       {options.map((option) => (
-        <label className="ui-segmented-control-option" key={option.value}>
+        <label className={s.option} key={option.value}>
           <input
             checked={value === option.value}
             name={name}

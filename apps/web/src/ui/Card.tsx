@@ -1,11 +1,12 @@
 import type { AnchorHTMLAttributes, HTMLAttributes } from "react";
+import * as s from "./Card.css";
 
 type CardProps = {
   link?: boolean;
 } & AnchorHTMLAttributes<HTMLAnchorElement>;
 
 export function Card({ link, href, className, children, ...rest }: CardProps) {
-  const cls = `card${link || href ? " card--link" : ""}${className ? ` ${className}` : ""}`;
+  const cls = [s.root, link || href ? s.link : null, className].filter(Boolean).join(" ");
 
   if (link || href) {
     return (

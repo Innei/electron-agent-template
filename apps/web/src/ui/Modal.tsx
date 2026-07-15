@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { X } from "lucide-react";
+import * as s from "./Modal.css";
 import { ScrollArea } from "./ScrollArea";
 
 export function Modal({ title, onClose, children }: { title: ReactNode; onClose: () => void; children: ReactNode }) {
@@ -16,15 +17,15 @@ export function Modal({ title, onClose, children }: { title: ReactNode; onClose:
   }, [onClose]);
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-panel" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-head">
-          <span className="modal-title">{title}</span>
-          <button className="modal-close" onClick={onClose} aria-label="Close">
+    <div className={s.backdrop} onClick={onClose}>
+      <div className={s.panel} role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+        <div className={s.head}>
+          <span className={s.title}>{title}</span>
+          <button className={s.close} onClick={onClose} aria-label="Close">
             <X size={16} />
           </button>
         </div>
-        <ScrollArea className="modal-body" contentClassName="modal-body-content">
+        <ScrollArea className={s.body} contentClassName={s.bodyContent}>
           {children}
         </ScrollArea>
       </div>

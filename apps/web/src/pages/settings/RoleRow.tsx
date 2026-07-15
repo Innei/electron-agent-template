@@ -169,6 +169,7 @@ export function RoleRow({
         <div className="settings-role-editor">
           <div className="settings-role-editor-controls">
             <Select
+              className="settings-select"
               value={draft.provider ?? ""}
               options={selectableProviders(catalog, draft.provider).map((p) => ({
                 value: p.id,
@@ -177,11 +178,13 @@ export function RoleRow({
               onChange={setProvider}
             />
             <Select
+              className="settings-select settings-select--wide"
               value={draft.modelId ?? ""}
               options={models.map((m) => ({ value: m.id, label: m.name }))}
               onChange={setModelId}
             />
             <Select
+              className="settings-select"
               value={draft.thinkingLevel ?? "off"}
               options={thinkingLevels.map((t) => ({ value: t, label: thinkingLabel(t) }))}
               onChange={setThinkingLevel}
