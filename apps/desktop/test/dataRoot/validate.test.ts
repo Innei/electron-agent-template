@@ -2,7 +2,7 @@ import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:f
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { CHART_DATA_REL, validateDataRootCandidate } from "../../src/dataRoot/validate.js";
+import { DATA_MARKER_REL, validateDataRootCandidate } from "../../src/dataRoot/validate.js";
 
 describe("validateDataRootCandidate", () => {
   let root: string;
@@ -11,7 +11,7 @@ describe("validateDataRootCandidate", () => {
   beforeEach(() => {
     root = mkdtempSync(join(tmpdir(), "data-root-validate-"));
     current = join(root, "current");
-    mkdirSync(join(current, CHART_DATA_REL), { recursive: true });
+    mkdirSync(join(current, DATA_MARKER_REL), { recursive: true });
   });
 
   afterEach(() => {
@@ -35,9 +35,9 @@ describe("validateDataRootCandidate", () => {
     expect(validateDataRootCandidate(file, current)).toEqual({ ok: false, reason: "not-dir" });
   });
 
-  it("accepts a writable directory that already has journal/charts/data", () => {
+  it("accepts a writable directory that already has a data/ folder", () => {
     const candidate = join(root, "repo");
-    mkdirSync(join(candidate, CHART_DATA_REL), { recursive: true });
+    mkdirSync(join(candidate, DATA_MARKER_REL), { recursive: true });
     expect(validateDataRootCandidate(candidate, current)).toEqual({ ok: true });
   });
 
@@ -47,7 +47,7 @@ describe("validateDataRootCandidate", () => {
     expect(validateDataRootCandidate(candidate, current)).toEqual({ ok: true });
   });
 
-  it("requires confirm when non-empty without journal/charts/data", () => {
+  it("requires confirm when non-empty without a data/ folder", () => {
     const candidate = join(root, "messy");
     mkdirSync(candidate);
     writeFileSync(join(candidate, "readme.md"), "hi");
@@ -86,9 +86,9 @@ describe("validateDataRootCandidate", () => {
     }
   });
 
-  it("rejects existing journal/charts/data when the root is not writable", () => {
+  it("rejects existing a data/ folder when the root is not writable", () => {
     const candidate = join(root, "repo-readonly");
-    mkdirSync(join(candidate, CHART_DATA_REL), { recursive: true });
+    mkdirSync(join(candidate, DATA_MARKER_REL), { recursive: true });
     chmodSync(candidate, 0o555);
     try {
       expect(validateDataRootCandidate(candidate, current)).toEqual({

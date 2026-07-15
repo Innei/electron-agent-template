@@ -79,7 +79,7 @@ async function runSelectDataRootFlowUnsafe(win: BrowserWindow | null): Promise<v
         cancelId: 0,
         title,
         message:
-          "This directory is not empty and has no journal/charts/data yet. Confirming will create the journal/, stocks/ and related structure here. Continue?",
+          "This directory is not empty and has no data/ folder yet. Confirming will create the app data structure here. Continue?",
       });
       if (choice.response !== 1) return;
     } else {

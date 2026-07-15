@@ -122,16 +122,16 @@ describe("focusOrOpenRoute", () => {
 
 describe("focusOrOpenRoutePrefix", () => {
   it("focuses an existing research tab regardless of its selected document", () => {
-    const snapshot = snapshotOf(["/", "/research?view=stocks&path=stocks%2FMU.md"], 0);
-    const next = focusOrOpenRoutePrefix(snapshot, "/research", "/research?view=journal");
+    const snapshot = snapshotOf(["/", "/docs?view=all&path=docs%2Fguide.md"], 0);
+    const next = focusOrOpenRoutePrefix(snapshot, "/docs", "/docs?view=recent");
     expect(next.tabs).toHaveLength(2);
     expect(next.activeTabId).toBe(snapshot.tabs[1].id);
   });
 
   it("opens the requested initial route when the route group is absent", () => {
     const snapshot = snapshotOf(["/"], 0);
-    const next = focusOrOpenRoutePrefix(snapshot, "/research", "/research?view=journal");
-    expect(next.tabs[1].route).toBe("/research?view=journal");
+    const next = focusOrOpenRoutePrefix(snapshot, "/docs", "/docs?view=recent");
+    expect(next.tabs[1].route).toBe("/docs?view=recent");
   });
 });
 

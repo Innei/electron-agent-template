@@ -18,8 +18,8 @@ describe("detectMentionTrigger", () => {
   });
 
   it("detects a trigger mid-text when cursor sits inside the query", () => {
-    const value = "@stocks/MU tail";
-    expect(detectMentionTrigger(value, 5)).toEqual({ start: 0, query: "stoc" });
+    const value = "@docs/alpha tail";
+    expect(detectMentionTrigger(value, 5)).toEqual({ start: 0, query: "docs" });
   });
 
   it("returns null when there is no @ before the cursor", () => {
@@ -37,9 +37,9 @@ describe("detectMentionTrigger", () => {
 
 describe("filterMentionCandidates", () => {
   const candidates = [
-    { path: "stocks/MU.md", title: "Micron" },
-    { path: "stocks/NVDA.md", title: "Nvidia" },
-    { path: "journal/2026-07-14-flow.md", title: "Capital flow" },
+    { path: "docs/alpha.md", title: "Alpha" },
+    { path: "docs/betaX.md", title: "Beta" },
+    { path: "docs/2026-07-14-note.md", title: "Daily note" },
   ];
 
   it("returns all candidates (capped) when the query is empty", () => {
@@ -47,11 +47,11 @@ describe("filterMentionCandidates", () => {
   });
 
   it("filters by path substring case-insensitively", () => {
-    expect(filterMentionCandidates(candidates, "mu")).toEqual([candidates[0]]);
+    expect(filterMentionCandidates(candidates, "ALPHA")).toEqual([candidates[0]]);
   });
 
   it("filters by title substring", () => {
-    expect(filterMentionCandidates(candidates, "nvidia")).toEqual([candidates[1]]);
+    expect(filterMentionCandidates(candidates, "beta")).toEqual([candidates[1]]);
   });
 
   it("returns an empty list when nothing matches", () => {
@@ -61,15 +61,15 @@ describe("filterMentionCandidates", () => {
 
 describe("insertMention", () => {
   it("replaces the trigger span with the mention path and a trailing space", () => {
-    const result = insertMention("hi @MU trend", 6, { start: 3, query: "MU" }, "stocks/MU.md");
-    expect(result.text).toBe("hi @stocks/MU.md  trend");
-    expect(result.cursor).toBe("hi @stocks/MU.md ".length);
+    const result = insertMention("hi @MU trend", 6, { start: 3, query: "MU" }, "docs/alpha.md");
+    expect(result.text).toBe("hi @docs/alpha.md  trend");
+    expect(result.cursor).toBe("hi @docs/alpha.md ".length);
   });
 
   it("works when the trigger is at the start of an empty value", () => {
-    const result = insertMention("@", 1, { start: 0, query: "" }, "stocks/MU.md");
-    expect(result.text).toBe("@stocks/MU.md ");
-    expect(result.cursor).toBe("@stocks/MU.md ".length);
+    const result = insertMention("@", 1, { start: 0, query: "" }, "docs/alpha.md");
+    expect(result.text).toBe("@docs/alpha.md ");
+    expect(result.cursor).toBe("@docs/alpha.md ".length);
   });
 
   it("regression: a stale cursor (captured before the caret moved via click/arrow keys, not onChange) corrupts the slice", () => {
@@ -80,34 +80,34 @@ describe("insertMention", () => {
     const liveCursor = 3;
     const staleCursor = 2;
 
-    const withLiveCursor = insertMention(value, liveCursor, trigger!, "stocks/MU.md");
-    const withStaleCursor = insertMention(value, staleCursor, trigger!, "stocks/MU.md");
+    const withLiveCursor = insertMention(value, liveCursor, trigger!, "docs/alpha.md");
+    const withStaleCursor = insertMention(value, staleCursor, trigger!, "docs/alpha.md");
 
-    expect(withLiveCursor.text).toBe("@stocks/MU.md  then typed a lot more");
+    expect(withLiveCursor.text).toBe("@docs/alpha.md  then typed a lot more");
     expect(withStaleCursor.text).not.toBe(withLiveCursor.text);
-    expect(withStaleCursor.text).toBe("@stocks/MU.md U then typed a lot more");
+    expect(withStaleCursor.text).toBe("@docs/alpha.md U then typed a lot more");
   });
 });
 
 describe("visible mention references", () => {
   const candidates = [
-    { path: "stocks/MU.md", title: "Micron" },
-    { path: "stocks/NVDA.md", title: "Nvidia" },
+    { path: "docs/alpha.md", title: "Alpha" },
+    { path: "docs/betaX.md", title: "Beta" },
   ];
 
   it("returns known references in library order without duplicating them", () => {
-    expect(findMentionedCandidates("compare @stocks/NVDA.md and @stocks/MU.md, then @stocks/NVDA.md", candidates)).toEqual([
+    expect(findMentionedCandidates("compare @docs/betaX.md and @docs/alpha.md, then @docs/betaX.md", candidates)).toEqual([
       candidates[0],
       candidates[1],
     ]);
   });
 
   it("ignores free-form @ text that is not a known research path", () => {
-    expect(findMentionedCandidates("tell @someone about @stocks/MU.md", candidates)).toEqual([candidates[0]]);
+    expect(findMentionedCandidates("tell @someone about @docs/alpha.md", candidates)).toEqual([candidates[0]]);
   });
 
   it("removes a selected reference without damaging the surrounding prompt", () => {
-    expect(removeMention("compare @stocks/NVDA.md and @stocks/MU.md", "stocks/NVDA.md")).toBe("compare and @stocks/MU.md");
-    expect(removeMention("@stocks/MU.md check supply", "stocks/MU.md")).toBe("check supply");
+    expect(removeMention("compare @docs/betaX.md and @docs/alpha.md", "docs/betaX.md")).toBe("compare and @docs/alpha.md");
+    expect(removeMention("@docs/alpha.md check supply", "docs/alpha.md")).toBe("check supply");
   });
 });

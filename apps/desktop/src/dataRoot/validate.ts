@@ -12,7 +12,7 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 
-export const CHART_DATA_REL = join("journal", "charts", "data");
+export const DATA_MARKER_REL = "data";
 
 export type DataRootCandidateResult =
   | { ok: true }
@@ -41,7 +41,7 @@ export function validateDataRootCandidate(path: string, currentRoot: string): Da
     return { ok: false, reason: "not-writable" };
   }
 
-  if (existsSync(join(path, CHART_DATA_REL))) {
+  if (existsSync(join(path, DATA_MARKER_REL))) {
     return { ok: true };
   }
 

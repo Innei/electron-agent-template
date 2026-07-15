@@ -90,7 +90,7 @@ export function DataRootSection() {
       ) : null}
 
       <div className="note-block">
-        Pick a repository root containing journal/ (or an empty directory); restart after changing; do not write to the same data directory while pnpm start is running.
+        Pick an empty directory (or one that already holds this app's data/); restart after changing.
       </div>
 
       {error ? <div className="settings-test-result settings-test-result--fail">{error}</div> : null}
