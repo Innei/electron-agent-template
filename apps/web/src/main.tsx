@@ -4,6 +4,7 @@ import { App } from "./App";
 import { persistOptions, queryClient } from "./queryClient";
 import { installRouter } from "./router";
 import "./styles.css";
+import "./styles/root.css";
 
 installRouter();
 createRoot(document.getElementById("root")!).render(
