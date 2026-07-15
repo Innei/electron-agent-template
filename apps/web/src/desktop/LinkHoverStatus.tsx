@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import * as s from "./LinkHoverStatus.css";
 
 export function externalLinkHref(href: string | null): string | null {
   if (!href || !/^https?:\/\//i.test(href)) return null;
@@ -36,7 +37,7 @@ export function LinkHoverStatus() {
   }, []);
 
   return (
-    <div className={`link-hover-status${visible ? " link-hover-status--visible" : ""}`} aria-hidden>
+    <div className={[s.root, visible ? s.visible : null].filter(Boolean).join(" ")} aria-hidden>
       {truncateUrl(url)}
     </div>
   );

@@ -1,9 +1,11 @@
+import * as s from "./AppSkeleton.css";
+
 function isElectronShell(): boolean {
   return typeof navigator !== "undefined" && /\bElectron\b/.test(navigator.userAgent);
 }
 
-function Bone({ className = "" }: { className?: string }) {
-  return <div className={`app-skeleton-bone${className ? ` ${className}` : ""}`} />;
+function Bone({ variant }: { variant: keyof typeof s.boneVariant }) {
+  return <div className={[s.bone, s.boneVariant[variant]].join(" ")} />;
 }
 
 export function AppSkeleton() {
@@ -11,15 +13,15 @@ export function AppSkeleton() {
 
   return (
     <div
-      className={`app-skeleton${desktop ? " app-skeleton--desktop" : ""}`}
+      className={[s.root, desktop ? s.desktop : null].filter(Boolean).join(" ")}
       aria-busy="true"
       aria-label="Loading"
     >
       {desktop && (
-        <div className="app-skeleton-titlebar">
-          <div className="app-skeleton-traffic" />
-          <div className="app-skeleton-tabstrip">
-            <Bone className="app-skeleton-bone--tab" />
+        <div className={s.titlebar}>
+          <div className={s.traffic} />
+          <div className={s.tabstrip}>
+            <Bone variant="tab" />
           </div>
         </div>
       )}
@@ -27,14 +29,14 @@ export function AppSkeleton() {
       <div className="page notes-page">
         <div className="notes-layout" aria-hidden="true">
           <aside className="notes-sidebar">
-            <Bone className="app-skeleton-bone--input" />
-            <Bone className="app-skeleton-bone--row" />
-            <Bone className="app-skeleton-bone--row" />
-            <Bone className="app-skeleton-bone--row" />
+            <Bone variant="input" />
+            <Bone variant="row" />
+            <Bone variant="row" />
+            <Bone variant="row" />
           </aside>
           <main className="notes-main">
-            <Bone className="app-skeleton-bone--chart-title" />
-            <Bone className="app-skeleton-bone--chart" />
+            <Bone variant="chartTitle" />
+            <Bone variant="chart" />
           </main>
         </div>
       </div>

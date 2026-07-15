@@ -6,6 +6,7 @@ import { defaultThinkingLevel, firstModelId, saveRole } from "../pages/settings/
 import { CODEX_PROVIDER, type Catalog } from "../pages/settings/types";
 import { Button, Card, Input, Select } from "../ui";
 import { CodexLogo, KeyLogo } from "./brandLogos";
+import * as s from "./StepAi.css";
 
 const CODEX_INSTALL_COMMAND = "npm install -g @openai/codex";
 const CODEX_INSTALL_URL = "https://github.com/openai/codex";
@@ -42,9 +43,9 @@ export function StepAi({ onNext }: { onNext: () => void }) {
 
   if (loading || !catalog) {
     return (
-      <Card className="onboarding-card">
+      <Card className={s.card}>
         <h1>Set up AI</h1>
-        <p className="onboarding-explainer">Detecting local AI environment…</p>
+        <p className={s.explainer}>Detecting local AI environment…</p>
       </Card>
     );
   }
@@ -97,22 +98,22 @@ export function StepAi({ onNext }: { onNext: () => void }) {
   const rows = codexReady ? [codexRow, apiKeyRow] : [apiKeyRow, codexRow];
 
   return (
-    <Card className="onboarding-card">
+    <Card className={s.card}>
       <h1>Set up AI</h1>
-      <p className="onboarding-explainer">
+      <p className={s.explainer}>
         The assistant needs a model provider. You can skip this and configure it in Settings at any time.
       </p>
 
-      <div className="onboarding-ai-list">
+      <div className={s.list}>
         {rows.map((row) => (
-          <div key={row.key} className={"onboarding-prow" + (row.recommended ? " onboarding-prow--rec" : "")}>
+          <div key={row.key} className={[s.prow, row.recommended ? s.prowRec : null].filter(Boolean).join(" ")}>
             {row.logo}
-            <div className="onboarding-prow-main">
-              <div className="onboarding-prow-name">
+            <div className={s.prowMain}>
+              <div className={s.prowName}>
                 {row.name}
-                {row.tag ? <span className="onboarding-rec-tag">{row.tag}</span> : null}
+                {row.tag ? <span className={s.recTag}>{row.tag}</span> : null}
               </div>
-              <div className="onboarding-prow-sub">{row.sub}</div>
+              <div className={s.prowSub}>{row.sub}</div>
             </div>
             <Button accent={row.action.accent} disabled={busy !== null} onClick={row.action.onClick}>
               {row.action.label}
@@ -122,9 +123,9 @@ export function StepAi({ onNext }: { onNext: () => void }) {
       </div>
 
       {showInstall ? (
-        <div className="onboarding-install">
-          <p className="onboarding-explainer">After installing and logging in to codex, it will be detected here automatically.</p>
-          <pre className="onboarding-cli-command"><code>{CODEX_INSTALL_COMMAND}</code></pre>
+        <div className={s.install}>
+          <p className={s.explainer}>After installing and logging in to codex, it will be detected here automatically.</p>
+          <pre className={s.cliCommand}><code>{CODEX_INSTALL_COMMAND}</code></pre>
           <div className="settings-cred-actions">
             <Button onClick={() => void navigator.clipboard.writeText(CODEX_INSTALL_COMMAND)}>Copy command</Button>
             <Button onClick={() => window.open(CODEX_INSTALL_URL, "_blank", "noopener,noreferrer")}>Install docs</Button>
@@ -133,7 +134,7 @@ export function StepAi({ onNext }: { onNext: () => void }) {
       ) : null}
 
       {showApiKey && apiProviders.length > 0 ? (
-        <div className="onboarding-apikey">
+        <div className={s.apiKey}>
           <Select
             value={effectiveApiProvider}
             options={apiProviders.map((p) => ({ value: p.id, label: p.name }))}
@@ -154,8 +155,8 @@ export function StepAi({ onNext }: { onNext: () => void }) {
 
       {error ? <div className="settings-test-result settings-test-result--fail">{error}</div> : null}
 
-      <div className="onboarding-skip-row">
-        <button className="onboarding-skip-link" disabled={busy !== null} onClick={skip}>
+      <div className={s.skipRow}>
+        <button className={s.skipLink} disabled={busy !== null} onClick={skip}>
           Skip — configure later in Settings
         </button>
       </div>

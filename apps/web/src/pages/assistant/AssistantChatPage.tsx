@@ -3,6 +3,7 @@ import { errorMessage } from "../../api";
 import { useQuery } from "../../apiHooks";
 import { client } from "../../client";
 import { navigate, useQueryParam } from "../../router";
+import { fullpage } from "../../styles/layout.css";
 import { Button, Empty, Spinner } from "../../ui";
 import { useTitle } from "../../useTitle";
 import { saveRole } from "../settings/roleShared";
@@ -81,7 +82,7 @@ export function AssistantChatPage() {
   };
 
   return (
-    <div className="fullpage assistant-page">
+    <div className={`${fullpage} assistant-page`}>
       <AssistantSessionList
         sessions={sessions}
         activeId={activeId}

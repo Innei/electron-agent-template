@@ -1,26 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import {
   ArrowUpCircle,
   Circle,
   House,
-  Library,
   MessageCircle,
   ScrollText,
   Settings,
-  TrendingUp,
   X,
-} from 'lucide-react'
-import { useHubStatus } from '../useHubStatus'
-import type { HubStatus } from '../wsHub'
-import { Dot, ScrollArea, showContextMenu, Tooltip, type ContextMenuItem } from '../ui'
+} from "lucide-react";
+import { useHubStatus } from "../useHubStatus";
+import type { HubStatus } from "../wsHub";
+import { Dot, ScrollArea, showContextMenu, Tooltip, type ContextMenuItem } from "../ui";
 import {
   getDesktopUpdaterBridge,
   isAvailableStatus,
   type UpdaterUiStatus,
-} from './desktopUpdater'
-import { tabKind, type TabState } from './tabsStore'
-import type { TabsController } from './tabsController'
-import { NewTabLauncher } from './NewTabLauncher'
+} from "./desktopUpdater";
+import { tabKind, type TabState } from "./tabsStore";
+import type { TabsController } from "./tabsController";
+import { NewTabLauncher } from "./NewTabLauncher";
+import * as s from "./DesktopTitlebar.css";
 
 const TAB_ICONS: Record<ReturnType<typeof tabKind>, typeof House> = {
   home: House,
@@ -28,34 +27,34 @@ const TAB_ICONS: Record<ReturnType<typeof tabKind>, typeof House> = {
   settings: Settings,
   logs: ScrollText,
   other: Circle,
-}
+};
 
 function TabIcon({ route }: { route: string }) {
-  const Icon = TAB_ICONS[tabKind(route)]
+  const Icon = TAB_ICONS[tabKind(route)];
   return (
-    <span className="desktop-tab-icon-wrap">
-      <Icon className="desktop-tab-icon" size={12} />
+    <span className={s.tabIconWrap}>
+      <Icon className={s.tabIcon} size={12} />
     </span>
-  )
+  );
 }
 
-const HUB_STATUS_META: Record<HubStatus, { label: string; tone?: 'accent' | 'ok'; pulse?: boolean; dim?: boolean }> = {
-  connected: { label: 'Market data connected', tone: 'ok' },
-  connecting: { label: 'Connecting market data…', tone: 'accent' },
-  reconnecting: { label: 'Market data disconnected, reconnecting…', tone: 'accent', pulse: true },
-  idle: { label: 'Market data idle (no subscriptions on this page)', dim: true },
-}
+const HUB_STATUS_META: Record<HubStatus, { label: string; tone?: "accent" | "ok"; pulse?: boolean; dim?: boolean }> = {
+  connected: { label: "Market data connected", tone: "ok" },
+  connecting: { label: "Connecting market data…", tone: "accent" },
+  reconnecting: { label: "Market data disconnected, reconnecting…", tone: "accent", pulse: true },
+  idle: { label: "Market data idle (no subscriptions on this page)", dim: true },
+};
 
 function HubStatusDot() {
-  const status = useHubStatus()
-  const meta = HUB_STATUS_META[status]
+  const status = useHubStatus();
+  const meta = HUB_STATUS_META[status];
   return (
     <Tooltip content={meta.label} placement="bottom">
-      <span className={`desktop-hub-status${meta.dim ? ' desktop-hub-status--dim' : ''}`}>
+      <span className={[s.hubStatus, meta.dim ? s.hubStatusDim : null].filter(Boolean).join(" ")}>
         <Dot tone={meta.tone} pulse={meta.pulse} aria-label={meta.label} role="status" />
       </span>
     </Tooltip>
-  )
+  );
 }
 
 function Tab({
@@ -66,68 +65,68 @@ function Tab({
   onClose,
   onContextMenu,
 }: {
-  tab: TabState
-  active: boolean
-  closable: boolean
-  onActivate: () => void
-  onClose: () => void
-  onContextMenu: () => void
+  tab: TabState;
+  active: boolean;
+  closable: boolean;
+  onActivate: () => void;
+  onClose: () => void;
+  onContextMenu: () => void;
 }) {
   return (
     <button
       type="button"
-      className={`desktop-tab${active ? ' desktop-tab--active' : ''}`}
+      className={[s.tab, active ? s.tabActive : null].filter(Boolean).join(" ")}
       onClick={onActivate}
       onContextMenu={(event) => {
-        event.preventDefault()
-        onContextMenu()
+        event.preventDefault();
+        onContextMenu();
       }}
     >
       <TabIcon route={tab.route} />
-      <span className="desktop-tab-title">{tab.title}</span>
+      <span className={s.tabTitle}>{tab.title}</span>
       {closable && (
         <span
-          className="desktop-tab-close"
+          className={s.tabClose}
           role="button"
           aria-label="Close tab"
           onClick={(event) => {
-            event.stopPropagation()
-            onClose()
+            event.stopPropagation();
+            onClose();
           }}
         >
           <X size={11} />
         </span>
       )}
     </button>
-  )
+  );
 }
 
 function useUpdaterStatus(): UpdaterUiStatus | null {
-  const [status, setStatus] = useState<UpdaterUiStatus | null>(null)
+  const [status, setStatus] = useState<UpdaterUiStatus | null>(null);
 
   useEffect(() => {
-    const bridge = getDesktopUpdaterBridge()
-    if (!bridge) return
-    let cancelled = false
+    const bridge = getDesktopUpdaterBridge();
+    if (!bridge) return;
+    let cancelled = false;
     void bridge.getStatus().then((next) => {
-      if (!cancelled) setStatus(next)
-    })
+      if (!cancelled) setStatus(next);
+    });
     const unsubscribe = bridge.onStatus((next) => {
-      if (!cancelled) setStatus(next)
-    })
+      if (!cancelled) setStatus(next);
+    });
     return () => {
-      cancelled = true
-      unsubscribe()
-    }
-  }, [])
+      cancelled = true;
+      unsubscribe();
+    };
+  }, []);
 
-  return status
+  return status;
 }
 
 export function DesktopTitlebar({
   controller,
 }: {
-  controller: TabsController
+  controller: TabsController;
 }) {
   const {
     snapshot,
@@ -139,51 +138,51 @@ export function DesktopTitlebar({
     focusOrOpenHome,
     focusOrOpenSettings,
     focusOrOpenChat,
-  } = controller
-  const updaterStatus = useUpdaterStatus()
-  const showUpdateBadge = isAvailableStatus(updaterStatus)
+  } = controller;
+  const updaterStatus = useUpdaterStatus();
+  const showUpdateBadge = isAvailableStatus(updaterStatus);
 
   const openTabMenu = (tabId: string, index: number) => {
-    const multi = snapshot.tabs.length > 1
-    const isLast = index === snapshot.tabs.length - 1
+    const multi = snapshot.tabs.length > 1;
+    const isLast = index === snapshot.tabs.length - 1;
     const items: ContextMenuItem[] = [
       {
-        key: 'close',
-        label: 'Close Tab',
-        accelerator: 'CmdOrCtrl+W',
+        key: "close",
+        label: "Close Tab",
+        accelerator: "CmdOrCtrl+W",
         disabled: !multi,
         onClick: () => closeTabById(tabId),
       },
       {
-        key: 'close-others',
-        label: 'Close Other Tabs',
+        key: "close-others",
+        label: "Close Other Tabs",
         disabled: !multi,
         onClick: () => closeOtherTabs(tabId),
       },
       {
-        key: 'close-right',
-        label: 'Close Tabs to the Right',
+        key: "close-right",
+        label: "Close Tabs to the Right",
         disabled: isLast,
         onClick: () => closeTabsToRight(tabId),
       },
-      { type: 'divider' },
+      { type: "divider" },
       {
-        key: 'new',
-        label: 'New Tab',
-        accelerator: 'CmdOrCtrl+T',
+        key: "new",
+        label: "New Tab",
+        accelerator: "CmdOrCtrl+T",
         onClick: openHomeTab,
       },
-    ]
-    showContextMenu(items)
-  }
+    ];
+    showContextMenu(items);
+  };
 
   return (
-    <div className="desktop-titlebar">
-      <div className="desktop-titlebar-traffic-spacer" />
+    <div className={s.titlebar}>
+      <div className={s.trafficSpacer} />
       <ScrollArea
-        className="desktop-tabstrip"
-        viewportClassName="desktop-tabstrip-viewport"
-        contentClassName="desktop-tabstrip-content"
+        className={s.tabstrip}
+        viewportClassName={s.tabstripViewport}
+        contentClassName={s.tabstripContent}
         orientation="horizontal"
       >
         {snapshot.tabs.map((tab, index) => (
@@ -202,33 +201,38 @@ export function DesktopTitlebar({
           onOpenChat={focusOrOpenChat}
         />
       </ScrollArea>
-      <div className="desktop-titlebar-actions">
+      <div className={s.actions}>
         {showUpdateBadge && (
           <button
-            className="desktop-update-badge"
+            className={s.updateBadge}
             type="button"
             aria-label="Update available"
             title="Update available"
             onClick={() => {
-              void getDesktopUpdaterBridge()?.installNow()
+              void getDesktopUpdaterBridge()?.installNow();
             }}
           >
             <ArrowUpCircle size={16} />
           </button>
         )}
         <button
-          className={`desktop-titlebar-settings${tabKind(controller.activeTab.route) === 'settings' ? ' desktop-titlebar-settings--active' : ''}`}
+          className={[
+            s.settings,
+            tabKind(controller.activeTab.route) === "settings" ? s.settingsActive : null,
+          ]
+            .filter(Boolean)
+            .join(" ")}
           type="button"
           aria-label="Settings"
           title="Settings (⌘,)"
           onClick={focusOrOpenSettings}
         >
-          <span className="desktop-titlebar-action-visual">
+          <span className={s.actionVisual}>
             <Settings size={14} />
           </span>
         </button>
         <HubStatusDot />
       </div>
     </div>
-  )
+  );
 }

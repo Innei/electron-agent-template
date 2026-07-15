@@ -2,6 +2,7 @@ import { Popover } from "@base-ui/react/popover";
 import { House, MessageCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { Kbd } from "../ui";
+import * as s from "./NewTabLauncher.css";
 
 interface NewTabLauncherProps {
   onOpenChat(): void;
@@ -19,29 +20,29 @@ export function NewTabLauncher({ onOpenChat, onOpenHome }: NewTabLauncherProps) 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger
-        className={`desktop-tab-new${open ? " desktop-tab-new--active" : ""}`}
+        className={[s.trigger, open ? s.triggerActive : null].filter(Boolean).join(" ")}
         aria-label="New tab"
         title="New tab"
       >
-        <span className="desktop-tab-new-visual">
+        <span className={s.visual}>
           <Plus size={13} />
         </span>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Positioner
-          className="desktop-new-tab-positioner"
+          className={s.positioner}
           side="bottom"
           align="start"
           sideOffset={4}
           collisionPadding={8}
         >
-          <Popover.Popup className="desktop-new-tab-popup" aria-label="New tab">
-            <div className="desktop-new-tab-menu">
-              <button type="button" onClick={() => run(onOpenHome)}>
+          <Popover.Popup className={s.popup} aria-label="New tab">
+            <div className={s.menu}>
+              <button type="button" className={s.menuItem} onClick={() => run(onOpenHome)}>
                 <House size={14} aria-hidden />
                 <span>Notes</span>
               </button>
-              <button type="button" onClick={() => run(onOpenChat)}>
+              <button type="button" className={s.menuItem} onClick={() => run(onOpenChat)}>
                 <MessageCircle size={14} aria-hidden />
                 <span>Assistant</span>
                 <Kbd keys={["mod", "L"]} />

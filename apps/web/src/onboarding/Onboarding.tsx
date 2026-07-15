@@ -1,13 +1,15 @@
+import { trafficSpacer } from "../desktop/DesktopTitlebar.css";
 import { StepAi } from "./StepAi";
+import * as s from "./Onboarding.css";
 
 export function Onboarding({ onComplete }: { onComplete: () => Promise<void> }) {
   return (
     <>
-      <div className="onboarding-drag-bar" aria-hidden="true">
-        <div className="desktop-titlebar-traffic-spacer" />
+      <div className={s.dragBar} aria-hidden="true">
+        <div className={trafficSpacer} />
       </div>
-      <div className="page onboarding-page">
-        <div className="onboarding-shell">
+      <div className={`page ${s.page}`}>
+        <div className={s.shell}>
           <StepAi onNext={() => void onComplete()} />
         </div>
       </div>
