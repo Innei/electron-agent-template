@@ -3,6 +3,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { parseAppDeepLink } from "../../../../packages/shared/appDeepLink";
 import { navigate } from "../router";
+import * as s from "../styles/typeset.css";
 
 type MarkdownVariant = "chat" | "report";
 
@@ -34,7 +35,7 @@ const components: Components = {
 
 export function Markdown({ children, variant = "chat" }: { children: string; variant?: MarkdownVariant }) {
   return (
-    <div className={variant === "chat" ? "markdown markdown-chat" : "markdown markdown-report"}>
+    <div className={variant === "chat" ? `${s.typeset} ${s.typesetChat}` : `${s.typeset} ${s.typesetReport}`}>
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
         {children}
       </ReactMarkdown>
