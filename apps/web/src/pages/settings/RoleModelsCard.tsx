@@ -10,6 +10,7 @@ import {
   type Role,
   type RoleSetting,
 } from "./types";
+import * as s from "./settings.css";
 
 export function RoleModelsCard({
   initialRoles,
@@ -27,8 +28,8 @@ export function RoleModelsCard({
   onDraftChange: (role: Role | "primary", next: RoleSetting) => void;
 }) {
   return (
-    <Card className="settings-roles-card">
-      <div className="settings-card-heading">
+    <Card className={s.cardFlush}>
+      <div className={s.cardHeading}>
         <SectionTitle>Model Assignment</SectionTitle>
         <span>Changes save and apply immediately; an analysis already in progress keeps the old configuration</span>
       </div>
@@ -39,7 +40,7 @@ export function RoleModelsCard({
         credentials={credentials}
         onDraftChange={(next) => onDraftChange("primary", next)}
       />
-      <div className="settings-role-list">
+      <div className={s.roleList}>
         {ROLES.map((role) => (
           <RoleRow
             key={role}

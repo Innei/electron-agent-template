@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
+import { noteBlock } from "../../styles/layout.css";
 import { Badge, Button } from "../../ui";
 import {
   getDesktopDataRootBridge,
   isDataRootResetDisabled,
   type DataRootBridgeStatus,
 } from "./desktopDataRoot";
+import * as s from "./settings.css";
 
 const MODE_LABEL: Record<DataRootBridgeStatus["mode"], string> = {
   default: "System default",
@@ -59,8 +61,8 @@ export function DataRootSection() {
   };
 
   return (
-    <section className="settings-conn-section">
-      <div className="settings-conn-title">
+    <section className={s.connSection}>
+      <div className={s.connTitle}>
         <span>Data directory</span>
         {mode ? (
           <Badge tone={status?.degraded ? "down" : mode === "custom" ? "accent" : undefined}>
@@ -70,32 +72,32 @@ export function DataRootSection() {
       </div>
 
       {status?.effectivePath ? (
-        <div className="settings-provider-meta">{status.effectivePath}</div>
+        <div className={s.providerMeta}>{status.effectivePath}</div>
       ) : (
-        <div className="note-block">Loading…</div>
+        <div className={noteBlock}>Loading…</div>
       )}
 
-      {status?.degraded ? <div className="settings-warning-strip">{DEGRADED_MESSAGE}</div> : null}
+      {status?.degraded ? <div className={s.warningStrip}>{DEGRADED_MESSAGE}</div> : null}
 
       {status?.restartPending ? (
-        <div className="settings-test-result settings-test-result--ok">Setting saved; takes effect after restarting the app</div>
+        <div className={`${s.testResult} ${s.testResultOk}`}>Setting saved; takes effect after restarting the app</div>
       ) : null}
 
       {mode === "env" ? (
-        <div className="note-block">Currently overridden by the TRADE_PROJECT_ROOT environment variable; cannot be changed here.</div>
+        <div className={noteBlock}>Currently overridden by the TRADE_PROJECT_ROOT environment variable; cannot be changed here.</div>
       ) : null}
 
       {mode === "dev-repo" ? (
-        <div className="note-block">Development mode uses the repository directory; choosing will note that no setup is needed.</div>
+        <div className={noteBlock}>Development mode uses the repository directory; choosing will note that no setup is needed.</div>
       ) : null}
 
-      <div className="note-block">
+      <div className={noteBlock}>
         Pick an empty directory (or one that already holds this app's data/); restart after changing.
       </div>
 
-      {error ? <div className="settings-test-result settings-test-result--fail">{error}</div> : null}
+      {error ? <div className={`${s.testResult} ${s.testResultFail}`}>{error}</div> : null}
 
-      <div className="settings-cred-actions">
+      <div className={s.credActions}>
         <Button disabled={pickDisabled} onClick={() => void run("pick")}>
           Choose…
         </Button>

@@ -1,5 +1,6 @@
 import { root as numStyle } from "../../ui/Num.css";
 import type { SettingsViewModel } from "./settingsViewModel";
+import * as s from "./settings.css";
 
 type Summary = SettingsViewModel["summary"];
 
@@ -13,17 +14,17 @@ export function SettingsStatusStrip({
   onRetryUsage: () => void;
 }) {
   return (
-    <div className="settings-statusline" aria-label="Settings status overview">
-      <span className={"settings-statusline-state settings-statusline-state--" + summary.statusTone}>
+    <div className={s.statusline} aria-label="Settings status overview">
+      <span className={`${s.statuslineState} ${s.statuslineStateTone[summary.statusTone]}`}>
         {summary.statusLabel}
       </span>
-      <span className="settings-statusline-sep">·</span>
+      <span className={s.statuslineSep}>·</span>
       <span>{summary.enabledLabel}</span>
-      <span className={`settings-statusline-usage ${numStyle}`}>
+      <span className={`${s.statuslineUsage} ${numStyle}`}>
         {usageError ? (
           <>
             Failed to load today's usage
-            <button className="settings-statusline-retry" type="button" onClick={onRetryUsage}>
+            <button className={s.statuslineRetry} type="button" onClick={onRetryUsage}>
               Retry
             </button>
           </>

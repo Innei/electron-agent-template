@@ -4,6 +4,7 @@ import { useQuery } from "../../apiHooks";
 import { client } from "../../client";
 import { navigate, useQueryParam } from "../../router";
 import { fullpage } from "../../styles/layout.css";
+import * as s from "./assistant.css";
 import { Button, Empty, Spinner } from "../../ui";
 import { useTitle } from "../../useTitle";
 import { saveRole } from "../settings/roleShared";
@@ -82,7 +83,7 @@ export function AssistantChatPage() {
   };
 
   return (
-    <div className={`${fullpage} assistant-page`}>
+    <div className={`${fullpage} ${s.page}`}>
       <AssistantSessionList
         sessions={sessions}
         activeId={activeId}
@@ -92,7 +93,7 @@ export function AssistantChatPage() {
         onCreate={() => void handleCreate()}
         onDelete={(id) => void handleDelete(id)}
       />
-      <div className="assistant-main">
+      <div className={s.main}>
         {activeId ? (
           <AssistantConversation
             key={activeId}
@@ -107,11 +108,11 @@ export function AssistantChatPage() {
             onModelChange={(value) => void handleModelChange(value)}
           />
         ) : loading ? (
-          <div className="assistant-sidebar-state">
+          <div className={s.sidebarState}>
             <Spinner /> Loading sessions…
           </div>
         ) : (
-          <Empty className="assistant-empty">
+          <Empty className={s.empty}>
             <p>Pick a session, or create a new one to start chatting</p>
             <Button accent onClick={() => void handleCreate()}>
               New session

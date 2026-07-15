@@ -2,7 +2,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, Copy, FolderOpen, RefreshCw } from "lucide-react";
 import { navigate } from "../../router";
 import { useTitle } from "../../useTitle";
+import { icon, noteBlock, page } from "../../styles/layout.css";
 import { Button, ErrorBox } from "../../ui";
+import { backLink } from "../settings/settings.css";
+import * as s from "./logs.css";
 import { getDesktopLogsBridge } from "./desktopLogs";
 
 const POLL_MS = 2000;
@@ -74,25 +77,25 @@ export function LogsPage() {
 
   if (!bridge) {
     return (
-      <div className="page logs-page">
+      <div className={`${page} ${s.logsPage}`}>
         <LogsBackLink />
         <h1>Logs</h1>
-        <div className="note-block">Log viewing is only available in the desktop app.</div>
+        <div className={noteBlock}>Log viewing is only available in the desktop app.</div>
       </div>
     );
   }
 
   return (
-    <div className="page logs-page">
+    <div className={`${page} ${s.logsPage}`}>
       <LogsBackLink />
-      <div className="logs-page-header">
+      <div className={s.header}>
         <div>
           <h1>Logs</h1>
-          <div className="logs-page-path" title={path ?? undefined}>
+          <div className={s.path} title={path ?? undefined}>
             {path ?? "Loading…"}
           </div>
         </div>
-        <div className="logs-page-actions">
+        <div className={s.actions}>
           <Button type="button" onClick={() => void reload()}>
             <RefreshCw size={14} /> Refresh
           </Button>
@@ -105,14 +108,14 @@ export function LogsPage() {
         </div>
       </div>
 
-      {error ? <ErrorBox className="logs-page-error">{error}</ErrorBox> : null}
+      {error ? <ErrorBox className={s.error}>{error}</ErrorBox> : null}
 
-      <div className="logs-page-meta">
+      <div className={s.meta}>
         Showing last ~{Math.round(TAIL_BYTES / 1024)} KB · auto-refreshes every {POLL_MS / 1000}s
         {autoScroll ? " · following latest" : " · paused (scroll to bottom to resume)"}
       </div>
 
-      <pre ref={preRef} className="logs-viewer" onScroll={onScroll}>
+      <pre ref={preRef} className={s.viewer} onScroll={onScroll}>
         {text || "(no logs yet)"}
       </pre>
     </div>
@@ -122,7 +125,7 @@ export function LogsPage() {
 function LogsBackLink() {
   return (
     <a
-      className="settings-back-link"
+      className={backLink}
       href="/"
       onClick={(event) => {
         if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -131,7 +134,7 @@ function LogsBackLink() {
         else navigate("/");
       }}
     >
-      <ArrowLeft className="icon" size={13} /> Back
+      <ArrowLeft className={icon} size={13} /> Back
     </a>
   );
 }

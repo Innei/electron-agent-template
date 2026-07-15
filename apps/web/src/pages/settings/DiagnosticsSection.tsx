@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import { noteBlock } from "../../styles/layout.css";
 import { navigate } from "../../router";
 import { Button } from "../../ui";
 import { getDesktopLogsBridge } from "../logViewer/desktopLogs";
+import * as s from "./settings.css";
 
 export function DiagnosticsSection() {
   const bridge = getDesktopLogsBridge();
@@ -39,20 +41,20 @@ export function DiagnosticsSection() {
   };
 
   return (
-    <section className="settings-conn-section">
-      <div className="settings-conn-title">
+    <section className={s.connSection}>
+      <div className={s.connTitle}>
         <span>Diagnostics / Logs</span>
       </div>
 
       {path ? (
-        <div className="settings-provider-meta" title={path}>
+        <div className={s.providerMeta} title={path}>
           {path}
         </div>
       ) : (
-        <div className="note-block">Loading…</div>
+        <div className={noteBlock}>Loading…</div>
       )}
 
-      <div className="settings-cred-actions">
+      <div className={s.credActions}>
         <Button type="button" disabled={busy} onClick={() => navigate("/logs")}>
           View logs
         </Button>
@@ -61,7 +63,7 @@ export function DiagnosticsSection() {
         </Button>
       </div>
 
-      {error ? <div className="settings-test-result settings-test-result--fail">{error}</div> : null}
+      {error ? <div className={`${s.testResult} ${s.testResultFail}`}>{error}</div> : null}
     </section>
   );
 }

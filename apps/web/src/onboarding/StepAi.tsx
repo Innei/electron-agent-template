@@ -6,6 +6,7 @@ import { defaultThinkingLevel, firstModelId, saveRole } from "../pages/settings/
 import { CODEX_PROVIDER, type Catalog } from "../pages/settings/types";
 import { Button, Card, Input, Select } from "../ui";
 import { CodexLogo, KeyLogo } from "./brandLogos";
+import { credActions, testResult, testResultFail } from "../pages/settings/settings.css";
 import * as s from "./StepAi.css";
 
 const CODEX_INSTALL_COMMAND = "npm install -g @openai/codex";
@@ -126,7 +127,7 @@ export function StepAi({ onNext }: { onNext: () => void }) {
         <div className={s.install}>
           <p className={s.explainer}>After installing and logging in to codex, it will be detected here automatically.</p>
           <pre className={s.cliCommand}><code>{CODEX_INSTALL_COMMAND}</code></pre>
-          <div className="settings-cred-actions">
+          <div className={credActions}>
             <Button onClick={() => void navigator.clipboard.writeText(CODEX_INSTALL_COMMAND)}>Copy command</Button>
             <Button onClick={() => window.open(CODEX_INSTALL_URL, "_blank", "noopener,noreferrer")}>Install docs</Button>
           </div>
@@ -153,7 +154,7 @@ export function StepAi({ onNext }: { onNext: () => void }) {
         </div>
       ) : null}
 
-      {error ? <div className="settings-test-result settings-test-result--fail">{error}</div> : null}
+      {error ? <div className={`${testResult} ${testResultFail}`}>{error}</div> : null}
 
       <div className={s.skipRow}>
         <button className={s.skipLink} disabled={busy !== null} onClick={skip}>

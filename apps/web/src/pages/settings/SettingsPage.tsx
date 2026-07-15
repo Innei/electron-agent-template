@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useQuery } from "../../apiHooks";
 import { client } from "../../client";
 import { navigate } from "../../router";
+import { icon, noteBlock, page } from "../../styles/layout.css";
 import { Button, Card, ErrorBox, SectionTitle } from "../../ui";
 import { useTitle } from "../../useTitle";
 import { DataRootSection } from "./DataRootSection";
@@ -12,6 +13,7 @@ import { RoleModelsCard } from "./RoleModelsCard";
 import { SettingsStatusStrip } from "./SettingsStatusStrip";
 import { deriveSettingsViewModel } from "./settingsViewModel";
 import type { AiRoles, AiSettings, Catalog, Role, RoleSetting, UsageToday } from "./types";
+import * as s from "./settings.css";
 
 function SettingsWorkspace({
   settings,
@@ -44,8 +46,8 @@ function SettingsWorkspace({
   return (
     <>
       <SettingsStatusStrip summary={view.summary} usageError={usageError} onRetryUsage={reloadUsage} />
-      <div className="settings-workspace">
-        <div className="settings-main-column">
+      <div className={s.workspace}>
+        <div className={s.column}>
           <RoleModelsCard
             initialRoles={settings.roles}
             roles={roleDrafts}
@@ -54,7 +56,7 @@ function SettingsWorkspace({
             view={view}
             onDraftChange={updateRoleDraft}
           />
-          <Card className="settings-provider-card">
+          <Card className={s.cardFlush}>
             <ProviderCredentialsSection
               settings={settings}
               catalog={catalog}
@@ -63,9 +65,9 @@ function SettingsWorkspace({
             />
           </Card>
         </div>
-        <div className="settings-side-column">
-          <Card className="settings-connections-card">
-            <div className="settings-card-heading">
+        <div className={s.column}>
+          <Card className={s.cardFlush}>
+            <div className={s.cardHeading}>
               <SectionTitle>Connections</SectionTitle>
             </div>
             <DataRootSection />
@@ -80,7 +82,7 @@ function SettingsWorkspace({
 function SettingsBackLink() {
   return (
     <a
-      className="settings-back-link"
+      className={s.backLink}
       href="/"
       onClick={(event) => {
         if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -89,7 +91,7 @@ function SettingsBackLink() {
         else navigate("/");
       }}
     >
-      <ArrowLeft className="icon" size={13} /> Back
+      <ArrowLeft className={icon} size={13} /> Back
     </a>
   );
 }
@@ -115,10 +117,10 @@ export function SettingsPage() {
 
   if (settingsError || catalogError) {
     return (
-      <div className="page settings-page">
+      <div className={`${page} ${s.settingsPage}`}>
         <SettingsBackLink />
         <h1>Settings</h1>
-        <ErrorBox className="settings-load-error">
+        <ErrorBox className={s.loadError}>
           <span>{settingsError ?? catalogError}</span>
           <Button
             onClick={() => {
@@ -135,19 +137,19 @@ export function SettingsPage() {
 
   if (!settings || !catalog) {
     return (
-      <div className="page settings-page">
+      <div className={`${page} ${s.settingsPage}`}>
         <SettingsBackLink />
         <h1>Settings</h1>
-        <div className="note-block">Loading…</div>
+        <div className={noteBlock}>Loading…</div>
       </div>
     );
   }
 
   return (
-    <div className="page settings-page">
+    <div className={`${page} ${s.settingsPage}`}>
       <SettingsBackLink />
       <h1>Settings</h1>
-      <div className="settings-page-subtitle">AI models, providers, and usage</div>
+      <div className={s.pageSubtitle}>AI models, providers, and usage</div>
       <SettingsWorkspace
         settings={settings}
         catalog={catalog}

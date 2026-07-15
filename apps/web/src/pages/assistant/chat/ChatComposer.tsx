@@ -10,6 +10,7 @@ import type {
 } from "react";
 import { Button, Input } from "../../../ui";
 import { root as inputStyle } from "../../../ui/Input.css";
+import * as s from "./chat.css";
 
 type ChatComposerFieldElement = HTMLInputElement | HTMLTextAreaElement;
 
@@ -77,11 +78,11 @@ export function ChatComposer({
 
   return (
     <>
-      <div className="chat-composer">
+      <div className={s.composer}>
         {multiline ? (
           <textarea
             ref={textareaRef}
-            className={`${inputStyle} chat-composer-field chat-composer-field--multiline`}
+            className={`${inputStyle} ${s.composerField} ${s.composerFieldMultiline}`}
             rows={1}
             aria-label={placeholder}
             autoComplete="off"
@@ -98,7 +99,7 @@ export function ChatComposer({
           />
         ) : (
           <Input
-            className="chat-composer-field"
+            className={s.composerField}
             aria-label={placeholder}
             autoComplete="off"
             name="message"
@@ -115,20 +116,20 @@ export function ChatComposer({
         )}
         <Button
           accent={!busy}
-          className={`chat-composer-action chat-composer-action--${busy ? "stop" : "send"}`}
+          className={`${s.composerAction} ${busy ? s.composerActionStop : s.composerActionSend}`}
           aria-label={busy ? "Stop generating" : "Send"}
           disabled={busy ? aborting : !value.trim() || disabled}
           onClick={busy ? onAbort : () => onSubmit(value)}
         >
           {prefersReducedMotion ? (
-            <span className="chat-composer-action-icon">
+            <span className={s.composerActionIcon}>
               {busy ? <Square size={12} aria-hidden="true" /> : <Send size={14} aria-hidden="true" />}
             </span>
           ) : (
             <AnimatePresence initial={false} mode="popLayout">
               <motion.span
                 key={busy ? "stop" : "send"}
-                className="chat-composer-action-icon"
+                className={s.composerActionIcon}
                 initial={{ opacity: 0, scale: 0.25, filter: "blur(4px)" }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, scale: 0.25, filter: "blur(4px)" }}
@@ -141,7 +142,7 @@ export function ChatComposer({
         </Button>
       </div>
       {hint && (
-        <div className="chat-hint" role="alert">
+        <div className={s.hint} role="alert">
           {hint}
         </div>
       )}

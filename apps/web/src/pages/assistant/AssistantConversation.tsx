@@ -21,6 +21,8 @@ import { ComposerReferences } from "./ComposerReferences";
 import { MessageQueueList } from "./MessageQueueList";
 import { decideSubmitAction } from "./messageQueue.js";
 import { useMessageQueue } from "./useMessageQueue.js";
+import * as shell from "./assistant.css";
+import * as s from "./conversation.css";
 
 interface MentionState {
   trigger: MentionTrigger;
@@ -190,12 +192,12 @@ export function AssistantConversation({
   };
 
   return (
-    <div className="assistant-conversation">
-      <div className="assistant-conversation-head">
-        <span className="assistant-conversation-title">{session?.title ?? "New session"}</span>
+    <div className={s.conversation}>
+      <div className={s.conversationHead}>
+        <span className={s.conversationTitle}>{session?.title ?? "New session"}</span>
       </div>
       <ConversationTranscript
-        className="assistant-conversation-body"
+        className={s.conversationBody}
         rows={rows}
         busy={busy}
         streamText={streamText}
@@ -205,18 +207,18 @@ export function AssistantConversation({
         onPickSuggestion={() => {}}
         modelLabels={modelLabels}
       />
-      <div className="assistant-conversation-dock">
-        <div className="assistant-conversation-dock-inner">
+      <div className={s.conversationDock}>
+        <div className={s.conversationDockInner}>
           <MessageQueueList queue={queue.queue} onRemove={queue.remove} />
-          <div className="assistant-conversation-composer-wrap">
+          <div className={s.composerWrap}>
             {mentionState ? (
-              <div className="assistant-mention-layer">
+              <div className={shell.mentionLayer}>
                 <AtMentionPopover candidates={filteredMentions} activeIndex={mentionState.activeIndex} onPick={pickMention} />
               </div>
             ) : null}
             <div
               ref={composerRef}
-              className="assistant-conversation-composer"
+              className={s.conversationComposer}
               data-expanded={composerExpanded ? "" : undefined}
               onFocusCapture={() => setComposerFocused(true)}
               onBlurCapture={(event) => {
@@ -276,13 +278,13 @@ export function AssistantConversation({
                   return false;
                 }}
               />
-              <div className="assistant-conversation-composer-meta" aria-hidden={!composerExpanded} inert={!composerExpanded}>
-                <div className="assistant-composer-tools">
+              <div className={s.composerMeta} aria-hidden={!composerExpanded} inert={!composerExpanded}>
+                <div className={s.composerTools}>
                   <Select
                     value={selectedModelValue}
                     options={modelChoices}
                     onChange={onModelChange}
-                    className="assistant-model-select"
+                    className={s.modelSelect}
                     disabled={modelSaving || modelChoices.length === 0}
                     ariaLabel="Choose conversation model"
                     placeholder={modelChoices.length === 0 ? "No model configured" : "Choose model"}
@@ -290,20 +292,20 @@ export function AssistantConversation({
                   />
                   <button
                     type="button"
-                    className="assistant-composer-context-action"
+                    className={s.contextAction}
                     onMouseDown={(event) => event.preventDefault()}
                     onClick={openMentionPicker}
                   >
                     <AtSign size={13} aria-hidden="true" /> Add reference
                   </button>
                 </div>
-                <div className="assistant-composer-status">
+                <div className={s.composerStatus}>
                   {modelError ? (
-                    <span className="assistant-model-error" role="alert">
+                    <span className={s.modelError} role="alert">
                       {modelError}
                     </span>
                   ) : null}
-                  <span className="assistant-composer-shortcut">
+                  <span className={s.composerShortcut}>
                     <Kbd keys={["enter"]} /> Send · <Kbd keys={["shift", "enter"]} /> New line
                   </span>
                 </div>

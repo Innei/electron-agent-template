@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Check, TriangleAlert } from "lucide-react";
 import { errorMessage } from "../../api";
 import { client } from "../../client";
+import { icon } from "../../styles/layout.css";
 import { Button, Chip, openModal, Select, Spinner } from "../../ui";
 import {
   defaultCustom,
@@ -14,6 +15,7 @@ import {
 } from "./roleShared";
 import { thinkingLabel, type Catalog, type CredentialEntry, type RoleSetting } from "./types";
 import { useSaveQueue } from "./useSaveQueue";
+import * as s from "./settings.css";
 
 export function PrimaryRow({
   initial,
@@ -76,9 +78,9 @@ export function PrimaryRow({
     openModal({
       title: "Clear Primary Model",
       body: (closeModal) => (
-        <div className="settings-reset-confirm">
+        <div>
           <p>After clearing, everything set to “Follow primary model” becomes unconfigured until a primary model is set again. Continue?</p>
-          <div className="settings-cred-actions">
+          <div className={s.credActions}>
             <Button onClick={closeModal}>Cancel</Button>
             <Button
               accent
@@ -122,12 +124,12 @@ export function PrimaryRow({
   };
 
   return (
-    <div className="settings-primary-row" id="settings-role-primary">
-      <div className="settings-primary-head">
-        <span className="settings-role-name">Primary model</span>
+    <div className={s.primaryRow} id="settings-role-primary">
+      <div className={s.primaryHead}>
+        <span className={s.roleName}>Primary model</span>
         {draft.mode !== "custom" && <Chip onClick={() => push(defaultCustom(catalog))}>Set primary model</Chip>}
         <span
-          className={failure ? "settings-role-status settings-role-status--rollback" : "settings-role-status"}
+          className={failure ? `${s.roleStatus} ${s.roleStatusRollback}` : s.roleStatus}
           aria-live="polite"
         >
           {queue.flushing() ? (
@@ -136,20 +138,20 @@ export function PrimaryRow({
             </>
           ) : failure ? (
             <>
-              <TriangleAlert size={12} className="icon" /> Unsaved
+              <TriangleAlert size={12} className={icon} /> Unsaved
             </>
           ) : (
             <>
-              <Check size={12} className="icon" /> Saved
+              <Check size={12} className={icon} /> Saved
             </>
           )}
         </span>
       </div>
 
       {draft.mode === "custom" && (
-        <div className="settings-primary-editor">
+        <div className={s.primaryEditor}>
           <Select
-            className="settings-select"
+            className={s.select}
             value={draft.provider ?? ""}
             options={selectableProviders(catalog, draft.provider).map((p) => ({
               value: p.id,
@@ -158,13 +160,13 @@ export function PrimaryRow({
             onChange={setProvider}
           />
           <Select
-            className="settings-select settings-select--wide"
+            className={s.selectWide}
             value={draft.modelId ?? ""}
             options={models.map((m) => ({ value: m.id, label: m.name }))}
             onChange={setModelId}
           />
           <Select
-            className="settings-select"
+            className={s.select}
             value={draft.thinkingLevel ?? "off"}
             options={thinkingLevels.map((t) => ({ value: t, label: thinkingLabel(t) }))}
             onChange={setThinkingLevel}
@@ -174,28 +176,28 @@ export function PrimaryRow({
           </Button>
           {testState.status === "busy" && <Spinner />}
           {testState.status === "ok" && (
-            <span className="settings-test-result settings-test-result--ok">{testState.text}</span>
+            <span className={`${s.testResult} ${s.testResultOk}`}>{testState.text}</span>
           )}
           {testState.status === "fail" && (
-            <span className="settings-test-result settings-test-result--fail">{testState.text}</span>
+            <span className={`${s.testResult} ${s.testResultFail}`}>{testState.text}</span>
           )}
-          <button type="button" className="settings-primary-clear" onClick={clear}>
+          <button type="button" className={s.primaryClear} onClick={clear}>
             Clear
           </button>
         </div>
       )}
 
       {failure ? (
-        <div className="settings-save-error" role="alert">
+        <div className={s.saveError} role="alert">
           <span>{failure.message}</span>
           <Button onClick={() => push(failure.retrySnapshot)}>Retry</Button>
         </div>
       ) : null}
       {draft.mode !== "custom" && (
-        <div className="settings-role-warning">Not set — everything following the primary model is paused</div>
+        <div className={s.roleWarning}>Not set — everything following the primary model is paused</div>
       )}
-      {computedStale && <div className="settings-role-warning">Model is no longer in the catalog; pick another</div>}
-      {keyMissing && <div className="settings-role-warning">No key configured for this provider</div>}
+      {computedStale && <div className={s.roleWarning}>Model is no longer in the catalog; pick another</div>}
+      {keyMissing && <div className={s.roleWarning}>No key configured for this provider</div>}
     </div>
   );
 }

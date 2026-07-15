@@ -5,6 +5,7 @@ import { Markdown } from "../../../lib/markdown";
 import { mergeTimeline, type TranscriptInsert } from "./transcriptTimeline.js";
 import { summarizeToolInput, toolRowKey } from "./toolSummary.js";
 import type { ChatLiveTool, ChatRow } from "./useChatSession";
+import * as s from "./chat.css";
 
 const SCROLL_STICK_THRESHOLD = 48;
 const tokenFormatter = new Intl.NumberFormat("en-US");
@@ -21,34 +22,34 @@ function ToolRow({ label, running, input, output }: { label: string; running: bo
   const summary = summarizeToolInput(input);
 
   return (
-    <div className="chat-tool">
+    <div className={s.tool}>
       <button
         type="button"
-        className="chat-tool-head"
+        className={s.toolHead}
         onClick={() => setOpen((current) => !current)}
         disabled={!hasDetail}
         aria-expanded={open}
       >
-        <span className={`chat-tool-dot${running ? " running" : ""}`} />
+        <span className={running ? `${s.toolDot} ${s.toolDotRunning}` : s.toolDot} />
         <span>
           {running ? "Running " : "Called "}
           {label}
           {running ? "…" : ""}
         </span>
-        {summary ? <span className="chat-tool-summary">{summary}</span> : null}
-        {hasDetail ? <ChevronRight size={12} className={`chat-tool-caret${open ? " open" : ""}`} /> : null}
+        {summary ? <span className={s.toolSummary}>{summary}</span> : null}
+        {hasDetail ? <ChevronRight size={12} className={open ? `${s.toolCaret} ${s.toolCaretOpen}` : s.toolCaret} /> : null}
       </button>
       {open && hasDetail ? (
-        <div className="chat-tool-detail">
+        <div className={s.toolDetail}>
           {input ? (
             <div>
-              <div className="chat-tool-detail-label">Input</div>
+              <div className={s.toolDetailLabel}>Input</div>
               <pre>{input}</pre>
             </div>
           ) : null}
           {output ? (
             <div>
-              <div className="chat-tool-detail-label">Output</div>
+              <div className={s.toolDetailLabel}>Output</div>
               <pre>{output}</pre>
             </div>
           ) : null}
@@ -61,8 +62,8 @@ function ToolRow({ label, running, input, output }: { label: string; running: bo
 function ChatRowView({ row, modelLabels }: { row: ChatRow; modelLabels?: Readonly<Record<string, string>> }) {
   if (row.kind === "user") {
     return (
-      <div className="chat-row chat-row--user">
-        <div className="chat-bubble chat-bubble--user">{row.text}</div>
+      <div className={`${s.row} ${s.rowUser}`}>
+        <div className={`${s.bubble} ${s.bubbleUser}`}>{row.text}</div>
       </div>
     );
   }
@@ -72,13 +73,13 @@ function ChatRowView({ row, modelLabels }: { row: ChatRow; modelLabels?: Readonl
       ? (modelLabels?.[JSON.stringify([meta.provider, meta.model])] ?? `${meta.provider}/${meta.model}`)
       : null;
     return (
-      <div className="chat-row">
-        <div className="chat-assistant-message">
-          <div className="chat-bubble chat-bubble--assistant">
+      <div className={s.row}>
+        <div className={s.assistantMessage}>
+          <div className={`${s.bubble} ${s.bubbleAssistant}`}>
             <Markdown variant="chat">{row.text ?? ""}</Markdown>
           </div>
           {meta && modelLabels ? (
-            <div className="chat-message-meta">
+            <div className={s.messageMeta}>
               <span>{modelLabel}</span>
               <span>{tokenFormatter.format(meta.totalTokens)} tokens</span>
               <span>{costFormatter.format(meta.costTotal)}</span>
@@ -91,7 +92,7 @@ function ChatRowView({ row, modelLabels }: { row: ChatRow; modelLabels?: Readonl
   if (row.kind === "tool") {
     return <ToolRow label={row.label ?? ""} running={false} input={row.input} output={row.output} />;
   }
-  return <div className="chat-error-row">{row.text}</div>;
+  return <div className={s.errorRow}>{row.text}</div>;
 }
 
 function ConversationTranscriptView({
@@ -133,7 +134,7 @@ function ConversationTranscriptView({
   return (
     <ScrollArea
       className={className}
-      contentClassName="chat-panel-body-content"
+      contentClassName={s.panelBodyContent}
       viewportRef={bodyRef}
       onScroll={() => {
         const element = bodyRef.current;
@@ -142,12 +143,12 @@ function ConversationTranscriptView({
       }}
     >
       {isEmpty && !busy ? (
-        <div className="chat-empty">
-          <div className="chat-empty-text">{emptyText}</div>
+        <div className={s.empty}>
+          <div className={s.emptyText}>{emptyText}</div>
           {suggestions.length > 0 ? (
-            <div className="chat-suggestions">
+            <div className={s.suggestions}>
               {suggestions.map((question) => (
-                <button type="button" key={question} className="chat-suggestion" onClick={() => onPickSuggestion(question)}>
+                <button type="button" key={question} className={s.suggestion} onClick={() => onPickSuggestion(question)}>
                   {question}
                 </button>
               ))}
@@ -159,7 +160,7 @@ function ConversationTranscriptView({
         entry.kind === "row" ? (
           <ChatRowView key={entry.row.id} row={entry.row} modelLabels={modelLabels} />
         ) : (
-          <div key={entry.insert.id} className="chat-insert">
+          <div key={entry.insert.id} className={s.insert}>
             {entry.insert.node}
           </div>
         ),
@@ -174,10 +175,10 @@ function ConversationTranscriptView({
         />
       ))}
       {streamText ? (
-        <div className="chat-row">
-          <div className="chat-bubble chat-bubble--assistant">
+        <div className={s.row}>
+          <div className={`${s.bubble} ${s.bubbleAssistant}`}>
             <Markdown variant="chat">{streamText}</Markdown>
-            <span className="chat-cursor" />
+            <span className={s.cursor} />
           </div>
         </div>
       ) : null}

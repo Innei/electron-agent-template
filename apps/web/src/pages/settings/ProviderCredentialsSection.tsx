@@ -9,6 +9,7 @@ import {
   type CatalogProvider,
   type CredentialEntry,
 } from "./types";
+import * as s from "./settings.css";
 
 const CODEX_STATUS_LABEL: Record<string, string> = {
   configured: "Signed in",
@@ -41,10 +42,10 @@ function ResetCredentialsDialog({
   };
 
   return (
-    <div className="settings-reset-confirm">
+    <div>
       <p>This clears all saved keys; they must be re-entered. Continue?</p>
-      {error ? <div className="settings-test-result settings-test-result--fail">{error}</div> : null}
-      <div className="settings-cred-actions">
+      {error ? <div className={`${s.testResult} ${s.testResultFail}`}>{error}</div> : null}
+      <div className={s.credActions}>
         <Button disabled={busy} onClick={closeModal}>
           Cancel
         </Button>
@@ -99,17 +100,17 @@ function ProviderAuthRow({
   const state = providerState(credential);
 
   return (
-    <div className="settings-provider-row" id={"settings-provider-" + provider.id}>
-      <div className="settings-provider-head">
-        <span className="settings-provider-name">{provider.name}</span>
-        <span className={"settings-provider-state settings-provider-state--" + state.tone}>
+    <div className={s.providerRow} id={"settings-provider-" + provider.id}>
+      <div className={s.providerHead}>
+        <span className={s.providerName}>{provider.name}</span>
+        <span className={`${s.providerState} ${s.providerStateTone[state.tone]}`}>
           <Dot tone={state.tone === "muted" ? undefined : state.tone} />
           {state.label}
         </span>
       </div>
-      <div className="settings-provider-meta">{credentialMeta(credential)}</div>
+      <div className={s.providerMeta}>{credentialMeta(credential)}</div>
       {editing ? (
-        <div className="settings-provider-editor">
+        <div className={s.providerEditor}>
           <Input
             autoComplete="off"
             type="password"
@@ -125,7 +126,7 @@ function ProviderAuthRow({
           </Button>
         </div>
       ) : (
-        <div className="settings-provider-actions">
+        <div className={s.providerActions}>
           <Button onClick={onStartEdit}>{credential ? "Update key" : "Add key"}</Button>
           {credential ? (
             <Button disabled={busy} onClick={onDelete}>
@@ -135,7 +136,7 @@ function ProviderAuthRow({
         </div>
       )}
       {error ? (
-        <div className="settings-provider-error" role="alert">
+        <div className={s.providerError} role="alert">
           {error}
         </div>
       ) : null}
@@ -148,15 +149,15 @@ function CodexAuthRow({ provider }: { provider: CatalogProvider }) {
     provider.auth.status === "configured" ? "up" : provider.auth.status === "error" ? "down" : "accent";
 
   return (
-    <div className="settings-provider-row" id={"settings-provider-" + provider.id}>
-      <div className="settings-provider-head">
-        <span className="settings-provider-name">{provider.name}</span>
-        <span className={"settings-provider-state settings-provider-state--" + tone}>
+    <div className={s.providerRow} id={"settings-provider-" + provider.id}>
+      <div className={s.providerHead}>
+        <span className={s.providerName}>{provider.name}</span>
+        <span className={`${s.providerState} ${s.providerStateTone[tone]}`}>
           <Dot tone={tone} />
           {CODEX_STATUS_LABEL[provider.auth.status]}
         </span>
       </div>
-      <div className="settings-provider-meta">Uses the local Codex sign-in state; no key is saved on this page</div>
+      <div className={s.providerMeta}>Uses the local Codex sign-in state; no key is saved on this page</div>
     </div>
   );
 }
@@ -279,19 +280,19 @@ export function ProviderCredentialsSection({
 
   return (
     <section id="settings-provider-panel">
-      <div className="settings-card-heading">
+      <div className={s.cardHeading}>
         <SectionTitle>Providers & Credentials</SectionTitle>
-        <span className="settings-conn-summary">
+        <span className={s.connSummary}>
           {apiKeyCount + " keys · " + codexSummary}
         </span>
       </div>
       {settings.masterKey === "invalid" ? (
-        <div className="settings-warning-strip">
+        <div className={s.warningStrip}>
           <span>Master key error; saved credentials cannot be decrypted</span>
           <Button onClick={handleReset}>Reset all credentials</Button>
         </div>
       ) : null}
-      <div className="settings-provider-list">
+      <div>
         {visibleProviders.map((provider) =>
           provider.id === CODEX_PROVIDER || provider.auth.kind === "oauth" ? (
             <CodexAuthRow key={provider.id} provider={provider} />
@@ -313,9 +314,9 @@ export function ProviderCredentialsSection({
           ),
         )}
         {availableToAdd.length > 0 ? (
-          <div className="settings-provider-add">
+          <div className={s.providerAdd}>
             <Select
-              className="settings-provider-add-select"
+              className={s.providerAddSelect}
               value={effectiveAddProvider}
               options={availableToAdd.map((provider) => ({ value: provider.id, label: provider.name }))}
               onChange={setAddProvider}
@@ -334,7 +335,7 @@ export function ProviderCredentialsSection({
               {addBusy ? "Saving…" : "Add provider"}
             </Button>
             {addError ? (
-              <div className="settings-provider-error" role="alert">
+              <div className={s.providerError} role="alert">
                 {addError}
               </div>
             ) : null}

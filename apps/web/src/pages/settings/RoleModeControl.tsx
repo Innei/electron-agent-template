@@ -1,5 +1,6 @@
 import { SegmentedControl, type SegmentedControlOption } from "../../ui";
 import { ROLE_LABEL, type Role, type RoleMode } from "./types";
+import * as s from "./settings.css";
 
 const MODE_OPTIONS = [
   { value: "inherit", label: "Follow primary model" },
@@ -19,7 +20,7 @@ export function RoleModeControl({
   return (
     <SegmentedControl
       ariaLabel={ROLE_LABEL[role] + " assignment mode"}
-      className="settings-role-mode"
+      className={s.roleMode}
       value={value}
       options={MODE_OPTIONS}
       onChange={onChange}

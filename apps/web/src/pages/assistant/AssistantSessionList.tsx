@@ -1,6 +1,7 @@
 import { Plus, X } from "lucide-react";
 import type { AssistantSessionMeta } from "../../../../../packages/core/src/contract";
 import { Button, Empty, Spinner, TimeAgo, openModal } from "../../ui";
+import * as s from "./assistant.css";
 
 interface AssistantSessionListProps {
   sessions: AssistantSessionMeta[];
@@ -16,9 +17,9 @@ function confirmDelete(session: AssistantSessionMeta, onDelete: (id: string) => 
   openModal({
     title: "Delete Session",
     body: (close) => (
-      <div className="assistant-confirm">
+      <div className={s.confirm}>
         <p>Deleting “{session.title}” cannot be undone. Continue?</p>
-        <div className="assistant-confirm-actions">
+        <div className={s.confirmActions}>
           <Button onClick={close}>Cancel</Button>
           <Button
             accent
@@ -37,37 +38,37 @@ function confirmDelete(session: AssistantSessionMeta, onDelete: (id: string) => 
 
 export function AssistantSessionList({ sessions, activeId, loading, error, onSelect, onCreate, onDelete }: AssistantSessionListProps) {
   return (
-    <div className="assistant-sidebar">
-      <div className="assistant-sidebar-head">
-        <Button className="assistant-new-session" onClick={onCreate}>
+    <div className={s.sidebar}>
+      <div className={s.sidebarHead}>
+        <Button className={s.newSession} onClick={onCreate}>
           <Plus size={13} /> New session
         </Button>
       </div>
-      <div className="assistant-sidebar-scroll">
+      <div className={s.sidebarScroll}>
         {loading && sessions.length === 0 ? (
-          <div className="assistant-sidebar-state">
+          <div className={s.sidebarState}>
             <Spinner /> Loading sessions…
           </div>
         ) : error ? (
-          <div className="assistant-sidebar-state">{error}</div>
+          <div className={s.sidebarState}>{error}</div>
         ) : sessions.length === 0 ? (
-          <Empty className="assistant-sidebar-empty">No sessions yet</Empty>
+          <Empty className={s.sidebarEmpty}>No sessions yet</Empty>
         ) : (
           sessions.map((session) => (
             <div
               key={session.id}
-              className={`assistant-session-row${session.id === activeId ? " active" : ""}`}
+              className={session.id === activeId ? `${s.sessionRow} ${s.sessionRowActive}` : s.sessionRow}
               onClick={() => onSelect(session.id)}
             >
-              <div className="assistant-session-row-main">
-                <span className="assistant-session-title">{session.title}</span>
-                <span className="assistant-session-time">
+              <div className={s.sessionRowMain}>
+                <span className={s.sessionTitle}>{session.title}</span>
+                <span className={s.sessionTime}>
                   <TimeAgo since={session.updatedAt} />
                 </span>
               </div>
               <button
                 type="button"
-                className="assistant-session-delete"
+                className={s.sessionDelete}
                 aria-label="Delete session"
                 onClick={(e) => {
                   e.stopPropagation();

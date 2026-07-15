@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Check, TriangleAlert } from "lucide-react";
 import { errorMessage } from "../../api";
 import { client } from "../../client";
+import { icon } from "../../styles/layout.css";
 import { Button, Select, Spinner } from "../../ui";
 import { RoleModeControl } from "./RoleModeControl";
 import {
@@ -24,6 +25,7 @@ import {
   type RoleSetting,
 } from "./types";
 import { useSaveQueue } from "./useSaveQueue";
+import * as s from "./settings.css";
 
 export function RoleRow({
   role,
@@ -129,47 +131,55 @@ export function RoleRow({
     }
   };
 
+  const effectiveTone =
+    view.tone === "muted" || view.tone === "warning" || view.tone === "error"
+      ? s.roleEffectiveTone[view.tone]
+      : null;
+
   return (
-    <div className={"settings-assignment-row settings-assignment-row--" + draft.mode} id={"settings-role-" + role}>
-      <div className="settings-role-summary">
-        <div className="settings-role-copy">
-          <div className="settings-role-heading">
-            <span className="settings-role-name">{ROLE_LABEL[role]}</span>
-            <span className="settings-role-usage">{view.usageLabel}</span>
+    <div
+      className={[s.assignmentRow, draft.mode === "disabled" ? s.assignmentRowDisabled : null].filter(Boolean).join(" ")}
+      id={"settings-role-" + role}
+    >
+      <div className={s.roleSummary}>
+        <div className={s.roleCopy}>
+          <div className={s.roleHeading}>
+            <span className={s.roleName}>{ROLE_LABEL[role]}</span>
+            <span className={s.roleUsage}>{view.usageLabel}</span>
           </div>
-          <div className={"settings-role-effective settings-role-effective--" + view.tone}>
+          <div className={[s.roleEffective, effectiveTone].filter(Boolean).join(" ")}>
             {view.effectiveLabel}
             {draft.mode === "custom" && !editing ? (
-              <button className="settings-role-edit" type="button" onClick={() => setEditing(true)}>
+              <button className={s.roleEdit} type="button" onClick={() => setEditing(true)}>
                 Edit
               </button>
             ) : null}
           </div>
         </div>
-        <div className="settings-role-actions">
+        <div className={s.roleActions}>
           <RoleModeControl role={role} value={draft.mode} onChange={setMode} />
           <span
-            className={failure ? "settings-role-status settings-role-status--rollback" : "settings-role-status"}
+            className={failure ? `${s.roleStatus} ${s.roleStatusRollback}` : s.roleStatus}
             aria-live="polite"
           >
             {queue.flushing() ? (
               <Spinner aria-label="Saving" />
             ) : failure ? (
               <>
-                <TriangleAlert size={12} className="icon" /> Unsaved
+                <TriangleAlert size={12} className={icon} /> Unsaved
               </>
             ) : (
-              <Check size={12} className="icon" aria-label="Saved" />
+              <Check size={12} className={icon} aria-label="Saved" />
             )}
           </span>
         </div>
       </div>
 
       {draft.mode === "custom" && editing && (
-        <div className="settings-role-editor">
-          <div className="settings-role-editor-controls">
+        <div className={s.roleEditor}>
+          <div className={s.roleEditorControls}>
             <Select
-              className="settings-select"
+              className={s.select}
               value={draft.provider ?? ""}
               options={selectableProviders(catalog, draft.provider).map((p) => ({
                 value: p.id,
@@ -178,13 +188,13 @@ export function RoleRow({
               onChange={setProvider}
             />
             <Select
-              className="settings-select settings-select--wide"
+              className={s.selectWide}
               value={draft.modelId ?? ""}
               options={models.map((m) => ({ value: m.id, label: m.name }))}
               onChange={setModelId}
             />
             <Select
-              className="settings-select"
+              className={s.select}
               value={draft.thinkingLevel ?? "off"}
               options={thinkingLevels.map((t) => ({ value: t, label: thinkingLabel(t) }))}
               onChange={setThinkingLevel}
@@ -193,7 +203,7 @@ export function RoleRow({
               Test model
             </Button>
             <button
-              className="settings-role-edit settings-role-edit--done"
+              className={`${s.roleEdit} ${s.roleEditDone}`}
               type="button"
               disabled={!complete}
               onClick={() => setEditing(false)}
@@ -201,22 +211,22 @@ export function RoleRow({
               Done
             </button>
           </div>
-          <div className="settings-role-editor-status" aria-live="polite">
+          <div className={s.roleEditorStatus} aria-live="polite">
             {testState.status === "busy" ? <Spinner aria-label="Testing" /> : null}
             {testState.status === "ok" ? (
-              <span className="settings-test-result settings-test-result--ok">{testState.text}</span>
+              <span className={`${s.testResult} ${s.testResultOk}`}>{testState.text}</span>
             ) : null}
             {testState.status === "fail" ? (
-              <span className="settings-test-result settings-test-result--fail">{testState.text}</span>
+              <span className={`${s.testResult} ${s.testResultFail}`}>{testState.text}</span>
             ) : null}
-            {computedStale ? <span className="settings-role-warning">Model is no longer in the catalog; pick another</span> : null}
-            {keyMissing ? <span className="settings-role-warning">No credentials configured for this provider</span> : null}
+            {computedStale ? <span className={s.roleWarning}>Model is no longer in the catalog; pick another</span> : null}
+            {keyMissing ? <span className={s.roleWarning}>No credentials configured for this provider</span> : null}
           </div>
         </div>
       )}
 
       {failure ? (
-        <div className="settings-save-error" role="alert">
+        <div className={s.saveError} role="alert">
           <span>{failure.message}</span>
           <Button onClick={() => push(failure.retrySnapshot)}>Retry</Button>
         </div>

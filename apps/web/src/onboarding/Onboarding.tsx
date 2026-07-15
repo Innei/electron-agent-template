@@ -8,7 +8,7 @@ export function Onboarding({ onComplete }: { onComplete: () => Promise<void> }) 
       <div className={s.dragBar} aria-hidden="true">
         <div className={trafficSpacer} />
       </div>
-      <div className={`page ${s.page}`}>
+      <div className={s.page}>
         <div className={s.shell}>
           <StepAi onNext={() => void onComplete()} />
         </div>

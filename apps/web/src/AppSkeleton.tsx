@@ -1,4 +1,6 @@
 import * as s from "./AppSkeleton.css";
+import { page } from "./styles/layout.css";
+import * as notes from "./pages/notes/notes.css";
 
 function isElectronShell(): boolean {
   return typeof navigator !== "undefined" && /\bElectron\b/.test(navigator.userAgent);
@@ -26,15 +28,15 @@ export function AppSkeleton() {
         </div>
       )}
 
-      <div className="page notes-page">
-        <div className="notes-layout" aria-hidden="true">
-          <aside className="notes-sidebar">
+      <div className={`${page} ${notes.notesPage}`}>
+        <div className={notes.layout} aria-hidden="true">
+          <aside className={notes.sidebar}>
             <Bone variant="input" />
             <Bone variant="row" />
             <Bone variant="row" />
             <Bone variant="row" />
           </aside>
-          <main className="notes-main">
+          <main className={notes.main}>
             <Bone variant="chartTitle" />
             <Bone variant="chart" />
           </main>

@@ -5,7 +5,9 @@ import { useQuery } from "../../apiHooks";
 import { client } from "../../client";
 import { navigate, useQueryParam } from "../../router";
 import { Button, Card, Empty, ErrorBox, Input, Spinner } from "../../ui";
+import { page } from "../../styles/layout.css";
 import { useTitle } from "../../useTitle";
+import * as s from "./notes.css";
 import { subscribeChannel } from "../../wsHub";
 
 function noteRoute(id: string | null): string {
@@ -52,10 +54,10 @@ function NoteEditor({ note, onSaved, onDeleted }: { note: Note; onSaved: () => v
   };
 
   return (
-    <Card className="notes-editor">
+    <Card className={s.editor}>
       <Input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Title" aria-label="Note title" />
       <textarea
-        className="notes-editor-body"
+        className={s.editorBody}
         value={body}
         onChange={(event) => setBody(event.target.value)}
         placeholder="Write something…"
@@ -63,7 +65,7 @@ function NoteEditor({ note, onSaved, onDeleted }: { note: Note; onSaved: () => v
         rows={16}
       />
       {error ? <ErrorBox>{error}</ErrorBox> : null}
-      <div className="notes-editor-actions">
+      <div className={s.editorActions}>
         <Button accent disabled={busy || !dirty || !title.trim()} onClick={() => void save()}>
           {busy ? "Saving…" : "Save"}
         </Button>
@@ -112,17 +114,17 @@ export function NotesPage() {
 
   if (loading) {
     return (
-      <div className="page notes-page">
+      <div className={`${page} ${s.notesPage}`}>
         <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="page notes-page">
-      <div className="notes-layout">
-        <aside className="notes-sidebar">
-          <div className="notes-sidebar-head">
+    <div className={`${page} ${s.notesPage}`}>
+      <div className={s.layout}>
+        <aside className={s.sidebar}>
+          <div className={s.sidebarHead}>
             <h1>Notes</h1>
             <Button accent disabled={creating} onClick={() => void createNote()}>
               New
@@ -132,23 +134,23 @@ export function NotesPage() {
           {notes.length === 0 ? (
             <Empty>No notes yet — create one.</Empty>
           ) : (
-            <ul className="notes-list">
+            <ul className={s.list}>
               {notes.map((note) => (
                 <li key={note.id}>
                   <button
                     type="button"
-                    className={"notes-list-item" + (note.id === active?.id ? " notes-list-item--active" : "")}
+                    className={note.id === active?.id ? `${s.listItem} ${s.listItemActive}` : s.listItem}
                     onClick={() => navigate(noteRoute(note.id))}
                   >
-                    <span className="notes-list-title">{note.title}</span>
-                    <span className="notes-list-time">{new Date(note.updatedAt).toLocaleString()}</span>
+                    <span className={s.listTitle}>{note.title}</span>
+                    <span className={s.listTime}>{new Date(note.updatedAt).toLocaleString()}</span>
                   </button>
                 </li>
               ))}
             </ul>
           )}
         </aside>
-        <main className="notes-main">
+        <main className={s.main}>
           {active ? (
             <NoteEditor note={active} onSaved={reload} onDeleted={() => reload()} />
           ) : (
