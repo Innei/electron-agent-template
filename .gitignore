@@ -9,3 +9,4 @@ apps/desktop/native/sparkle-bridge/build/
 apps/desktop/native/sparkle-bridge/*.node
 data/
 .env
+.worktrees/
