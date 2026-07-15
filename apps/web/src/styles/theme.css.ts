@@ -1,7 +1,71 @@
-import { createGlobalTheme } from "@vanilla-extract/css";
+import { createGlobalTheme, globalStyle } from "@vanilla-extract/css";
+import { tokens } from "./tokens";
 
 export const vars = createGlobalTheme(":root", {
   color: {
-    accent: "#ffb000",
+    bgCanvas: tokens.color.bgCanvas,
+    bgSurface: tokens.color.bgSurface,
+    bgElement: tokens.color.bgElement,
+    bgHover: tokens.color.bgHover,
+    border: tokens.color.border,
+    borderStrong: tokens.color.borderStrong,
+    textPrimary: tokens.color.textPrimary,
+    textSecondary: tokens.color.textSecondary,
+    textMuted: tokens.color.textMuted,
+    accent: tokens.color.accent,
+    up: tokens.color.up,
+    down: tokens.color.down,
+    ok: tokens.color.ok,
+    gridLine: tokens.color.gridLine,
+  },
+  focus: {
+    border: tokens.focus.border,
+    ring: tokens.focus.ring,
+    outline: tokens.focus.outline,
+  },
+  font: {
+    ui: tokens.font.ui,
+    mono: tokens.font.mono,
+  },
+  fontSize: {
+    xs: tokens.fontSize.xs,
+    sm: tokens.fontSize.sm,
+    base: tokens.fontSize.base,
+    md: tokens.fontSize.md,
+    lg: tokens.fontSize.lg,
+    xl: tokens.fontSize.xl,
+  },
+  radius: tokens.radius,
+  controlH: tokens.controlH,
+});
+
+globalStyle(":root", {
+  vars: {
+    "--bg-canvas": tokens.color.bgCanvas,
+    "--bg-surface": tokens.color.bgSurface,
+    "--bg-element": tokens.color.bgElement,
+    "--bg-hover": tokens.color.bgHover,
+    "--border": tokens.color.border,
+    "--border-strong": tokens.color.borderStrong,
+    "--text-primary": tokens.color.textPrimary,
+    "--text-secondary": tokens.color.textSecondary,
+    "--text-muted": tokens.color.textMuted,
+    "--accent": tokens.color.accent,
+    "--focus-border": tokens.focus.border,
+    "--focus-ring": tokens.focus.ring,
+    "--focus-outline": tokens.focus.outline,
+    "--up": tokens.color.up,
+    "--down": tokens.color.down,
+    "--ok": tokens.color.ok,
+    "--font-ui": tokens.font.ui,
+    "--font-mono": tokens.font.mono,
+    "--fs-xs": tokens.fontSize.xs,
+    "--fs-sm": tokens.fontSize.sm,
+    "--fs-base": tokens.fontSize.base,
+    "--fs-md": tokens.fontSize.md,
+    "--fs-lg": tokens.fontSize.lg,
+    "--fs-xl": tokens.fontSize.xl,
+    "--radius": tokens.radius,
+    "--control-h": tokens.controlH,
   },
 });

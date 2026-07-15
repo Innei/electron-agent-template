@@ -1,17 +1,19 @@
+import { tokens } from "./styles/tokens";
+
 export const theme = {
-  bgCanvas: "#0a0a0a",
-  bgSurface: "#141414",
-  bgElement: "#1e1e1e",
-  border: "#262626",
-  gridLine: "#1d1d1d",
-  borderStrong: "#3a3a3a",
-  textPrimary: "#e8e8e8",
-  textSecondary: "#9a9a9a",
-  textMuted: "#5c5c5c",
-  accent: "#facc15",
-  up: "#26a69a",
-  down: "#ef5350",
-  fontMono: "ui-monospace, 'SF Mono', Menlo, monospace",
+  bgCanvas: tokens.color.bgCanvas,
+  bgSurface: tokens.color.bgSurface,
+  bgElement: tokens.color.bgElement,
+  border: tokens.color.border,
+  gridLine: tokens.color.gridLine,
+  borderStrong: tokens.color.borderStrong,
+  textPrimary: tokens.color.textPrimary,
+  textSecondary: tokens.color.textSecondary,
+  textMuted: tokens.color.textMuted,
+  accent: tokens.color.accent,
+  up: tokens.color.up,
+  down: tokens.color.down,
+  fontMono: tokens.font.mono,
 } as const;
 
 export const seriesPalette = [theme.accent, theme.textPrimary, theme.up, theme.down, theme.textSecondary] as const;

@@ -1,34 +1,5 @@
 @import "./typeset.css";
 
-:root {
-  --bg-canvas: #0a0a0a;
-  --bg-surface: #141414;
-  --bg-element: #1e1e1e;
-  --bg-hover: #262626;
-  --border: #262626;
-  --border-strong: #3a3a3a;
-  --text-primary: #e8e8e8;
-  --text-secondary: #9a9a9a;
-  --text-muted: #5c5c5c;
-  --accent: #ffb000;
-  --focus-border: #7a7a7a;
-  --focus-ring: 0 0 0 2px rgb(232 232 232 / 0.12);
-  --focus-outline: 1px solid rgb(232 232 232 / 0.35);
-  --up: #26a69a;
-  --down: #ef5350;
-  --ok: #34c759;
-  --font-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --fs-xs: 10px;
-  --fs-sm: 11px;
-  --fs-base: 12px;
-  --fs-md: 13px;
-  --fs-lg: 15px;
-  --fs-xl: 20px;
-  --radius: 2px;
-  --control-h: 28px;
-}
-
 .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .up { color: var(--up); }
 .down { color: var(--down); }
@@ -170,19 +141,6 @@
   .spinner { animation: none; }
 }
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: var(--font-ui);
-  background: var(--bg-canvas);
-  color: var(--text-primary);
-}
-
-a { color: var(--text-primary); text-decoration: none; }
-a:hover { color: var(--accent); }
-
-:focus-visible { outline: var(--focus-outline); outline-offset: 2px; }
 .btn:focus-visible,
 .chip:focus-visible,
 .input:focus-visible,

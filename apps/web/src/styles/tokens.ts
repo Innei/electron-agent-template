@@ -1,0 +1,37 @@
+export const tokens = {
+  color: {
+    bgCanvas: "#0a0a0a",
+    bgSurface: "#141414",
+    bgElement: "#1e1e1e",
+    bgHover: "#262626",
+    border: "#262626",
+    borderStrong: "#3a3a3a",
+    textPrimary: "#e8e8e8",
+    textSecondary: "#9a9a9a",
+    textMuted: "#5c5c5c",
+    accent: "#ffb000",
+    up: "#26a69a",
+    down: "#ef5350",
+    ok: "#34c759",
+    gridLine: "#1d1d1d",
+  },
+  focus: {
+    border: "#7a7a7a",
+    ring: "0 0 0 2px rgb(232 232 232 / 0.12)",
+    outline: "1px solid rgb(232 232 232 / 0.35)",
+  },
+  font: {
+    ui: '-apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif',
+    mono: 'ui-monospace, "SF Mono", Menlo, monospace',
+  },
+  fontSize: {
+    xs: "10px",
+    sm: "11px",
+    base: "12px",
+    md: "13px",
+    lg: "15px",
+    xl: "20px",
+  },
+  radius: "2px",
+  controlH: "28px",
+} as const;
