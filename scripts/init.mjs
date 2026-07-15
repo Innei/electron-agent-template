@@ -54,10 +54,18 @@ if (!readFileSync(rootPackageJson, "utf8").includes(`"${PLACEHOLDERS.workspaceNa
   process.exit(1);
 }
 
-const rl = createInterface({ input: process.stdin, output: process.stdout });
+const interactive = process.stdin.isTTY;
+const rl = interactive ? createInterface({ input: process.stdin, output: process.stdout }) : null;
+// Piped stdin (CI / scripted runs): consume all lines up front — readline's
+// promise API never settles once a non-TTY stdin closes mid-question.
+const pipedAnswers = interactive
+  ? []
+  : readFileSync(0, "utf8").split("\n");
 
 async function ask(question, fallback) {
-  const answer = (await rl.question(`${question}${fallback ? ` [${fallback}]` : ""}: `)).trim();
+  const prompt = `${question}${fallback ? ` [${fallback}]` : ""}: `;
+  const raw = rl ? await rl.question(prompt) : (console.log(prompt), pipedAnswers.shift() ?? "");
+  const answer = raw.trim();
   return answer || fallback || "";
 }
 
@@ -72,7 +80,7 @@ const productName = await ask("Product display name", projectName.replace(/(^|-)
 const bundleId = await ask("macOS bundle id", `com.example.${projectName}`);
 const repoSlug = await ask("GitHub repo (owner/name, drives Sparkle feed + releases; enter to skip)", "");
 const removeNotes = (await ask("Remove the notes example module? (y/N)", "N")).toLowerCase().startsWith("y");
-rl.close();
+rl?.close();
 
 const replacements = [
   [PLACEHOLDERS.scope, `@${scope}/`],
