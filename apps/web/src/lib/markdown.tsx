@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { parseAppDeepLink } from "../../../../packages/shared/appDeepLink";
-import { navigate } from "../router";
+import { navigate } from "./router";
 import * as s from "../styles/typeset.css";
 
 type MarkdownVariant = "chat" | "report";

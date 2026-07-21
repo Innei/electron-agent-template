@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useQuery } from "../../lib/apiHooks";
 import { client } from "../../lib/client";
-import { navigate } from "../../router";
+import { navigate } from "../../lib/router";
 import { icon, noteBlock, page } from "../../styles/layout.css";
 import { Button, Card, ErrorBox, SectionTitle } from "../../ui";
 import { useTitle } from "../../lib/useTitle";

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, Copy, FolderOpen, RefreshCw } from "lucide-react";
-import { navigate } from "../../router";
+import { navigate } from "../../lib/router";
 import { useTitle } from "../../lib/useTitle";
 import { icon, noteBlock, page } from "../../styles/layout.css";
 import { Button, ErrorBox } from "../../ui";

@@ -1,4 +1,4 @@
-import { Router } from "../../PageRouter";
+import { RouterProvider } from "react-router";
 import { ContextMenuHost, ModalHost } from "../../ui";
 import * as s from "./DesktopShell.css";
 import { DesktopTitlebar } from "./DesktopTitlebar";
@@ -12,7 +12,7 @@ export function DesktopShell() {
     <>
       <DesktopTitlebar controller={controller} />
       <div className={s.content} key={controller.activeTab.id}>
-        <Router />
+        <RouterProvider router={controller.activeRouter} />
       </div>
       <LinkHoverStatus />
       <ModalHost />

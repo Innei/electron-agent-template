@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { noteBlock } from "../../styles/layout.css";
-import { navigate } from "../../router";
+import { navigate } from "../../lib/router";
 import { Button } from "../../ui";
 import { getDesktopLogsBridge } from "../logs/desktopLogs";
 import * as s from "./settings.css";

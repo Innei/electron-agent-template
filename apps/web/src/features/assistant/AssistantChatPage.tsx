@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { errorMessage } from "../../lib/api";
 import { useQuery } from "../../lib/apiHooks";
 import { client } from "../../lib/client";
-import { navigate, useQueryParam } from "../../router";
+import { navigate, useQueryParam } from "../../lib/router";
 import { fullpage } from "../../styles/layout.css";
 import * as s from "./assistant.css";
 import { Button, Empty, Spinner } from "../../ui";

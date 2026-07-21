@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createMemoryRouteStore, __setActiveRouteStore, type RouteStore } from "../../router";
+import { createMemoryRouter } from "react-router";
+import type { DataRouter } from "react-router";
+import { setActiveRouter } from "../../lib/router";
+import { routes } from "../../generated-routes";
 import { __setActiveTitleSink } from "../../lib/useTitle";
 import { getDesktopTabsBridge } from "./desktopTabsBridge";
 import * as tabsStore from "./tabsStore";
@@ -8,6 +11,7 @@ import { loadTabsSnapshot, saveTabsSnapshot, type TabsSnapshot, type TabState } 
 export interface TabsController {
   snapshot: TabsSnapshot;
   activeTab: TabState;
+  activeRouter: DataRouter;
   activateTab(id: string): void;
   closeTabById(id: string): void;
   closeOtherTabs(id: string): void;
@@ -33,17 +37,49 @@ export function useTabsController(): TabsController {
 
   const activeTab = snapshot.tabs.find((tab) => tab.id === snapshot.activeTabId) ?? snapshot.tabs[0];
 
-  const storeRef = useRef<{ tabId: string; store: RouteStore } | null>(null);
-  if (storeRef.current?.tabId !== activeTab.id) {
-    storeRef.current = {
-      tabId: activeTab.id,
-      store: createMemoryRouteStore(activeTab.route, {
-        onChange: (route) => setSnapshot((prev) => tabsStore.updateTabRoute(prev, activeTab.id, route)),
-      }),
-    };
+  const routersRef = useRef(new Map<string, DataRouter>());
+  const getTabRouter = useCallback((tab: TabState): DataRouter => {
+    const cached = routersRef.current.get(tab.id);
+    if (cached) return cached;
+    const router = createMemoryRouter(routes, { initialEntries: [tab.route] });
+    let lastRoute = tab.route;
+    router.subscribe((state) => {
+      const route = state.location.pathname + state.location.search;
+      if (route === lastRoute) return;
+      lastRoute = route;
+      setSnapshot((prev) => tabsStore.updateTabRoute(prev, tab.id, route));
+    });
+    routersRef.current.set(tab.id, router);
+    return router;
+  }, []);
+
+  const activeRouter = getTabRouter(activeTab);
+  const lastActiveRouterRef = useRef<DataRouter | null>(null);
+  if (lastActiveRouterRef.current !== activeRouter) {
+    lastActiveRouterRef.current = activeRouter;
+    setActiveRouter(activeRouter);
   }
-  __setActiveRouteStore(storeRef.current.store);
   __setActiveTitleSink((title) => setSnapshot((prev) => tabsStore.updateTabTitle(prev, activeTab.id, title)));
+
+  useEffect(() => {
+    const liveIds = new Set(snapshot.tabs.map((tab) => tab.id));
+    liveIds.add(activeTab.id);
+    for (const [id, router] of routersRef.current) {
+      if (!liveIds.has(id)) {
+        router.dispose();
+        routersRef.current.delete(id);
+      }
+    }
+  }, [snapshot.tabs, activeTab.id]);
+
+  useEffect(() => {
+    const routersAtMount = routersRef.current;
+    return () => {
+      for (const router of routersAtMount.values()) router.dispose();
+      routersAtMount.clear();
+      setActiveRouter(null);
+    };
+  }, []);
 
   const activeTabId = activeTab.id;
   useEffect(() => {
@@ -117,6 +153,7 @@ export function useTabsController(): TabsController {
   return {
     snapshot,
     activeTab,
+    activeRouter,
     activateTab,
     closeTabById,
     closeOtherTabs,

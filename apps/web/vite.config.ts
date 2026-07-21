@@ -2,12 +2,19 @@ import babel from "@rolldown/plugin-babel";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import { routeBuilderPlugin } from "vite-plugin-route-builder";
 
 const KERNEL_PORT = Number(process.env.KERNEL_PORT || 5200);
 const KERNEL_URL = `http://localhost:${KERNEL_PORT}`;
 
 export default defineConfig({
   plugins: [
+    routeBuilderPlugin({
+      pagePattern: "./src/pages/**/*.{tsx,sync.tsx}",
+      outputPath: "./src/generated-routes.ts",
+      enableInDev: true,
+      transformPath: (path) => path.replace(/\[\.\.\.[^\]]*\]/, "*"),
+    }),
     vanillaExtractPlugin(),
     react(),
     babel({ presets: [reactCompilerPreset()] }),

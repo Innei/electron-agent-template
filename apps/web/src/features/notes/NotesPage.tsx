@@ -3,7 +3,7 @@ import type { Note } from "../../../../../packages/core/src/contract";
 import { errorMessage } from "../../lib/api";
 import { useQuery } from "../../lib/apiHooks";
 import { client } from "../../lib/client";
-import { navigate, useQueryParam } from "../../router";
+import { navigate, useQueryParam } from "../../lib/router";
 import { Button, Card, Empty, ErrorBox, Input, Spinner } from "../../ui";
 import { page } from "../../styles/layout.css";
 import { useTitle } from "../../lib/useTitle";
