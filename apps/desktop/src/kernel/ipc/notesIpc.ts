@@ -1,6 +1,6 @@
 import { IpcMethod, IpcService } from "electron-ipc-decorator";
-import type { NotesApi } from "../../../../packages/core/src/contract/index.js";
-import { notesService } from "../../../../packages/core/src/modules/notes/notes.service.js";
+import type { NotesApi } from "../../../../../packages/core/src/contract/index.js";
+import { notesService } from "../../../../../packages/core/src/modules/notes/notes.service.js";
 import { toEnvelope, type WrapEnvelope } from "./envelope.js";
 
 export class NotesIpc extends IpcService implements WrapEnvelope<NotesApi> {

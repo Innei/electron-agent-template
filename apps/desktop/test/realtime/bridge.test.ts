@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { PortLike } from "../../src/realtime/bridge.js";
+import type { PortLike } from "../../src/kernel/realtime/bridge.js";
 
 const handleConnection = vi.fn();
 vi.mock("../../../../packages/core/src/realtime/channelProtocol.js", () => ({ handleConnection }));
@@ -16,7 +16,7 @@ const ipcMain = {
 };
 vi.mock("electron", () => ({ ipcMain }));
 
-const { attachRealtimeBridge, wrapMessagePort } = await import("../../src/realtime/bridge.js");
+const { attachRealtimeBridge, wrapMessagePort } = await import("../../src/kernel/realtime/bridge.js");
 
 class FakePort implements PortLike {
   sent: unknown[] = [];

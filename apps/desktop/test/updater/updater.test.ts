@@ -7,9 +7,9 @@ import {
   shouldCheck,
   startUpdater,
   type UpdaterDeps,
-} from "../../src/updater/updater.js";
-import { createUpdaterStatusStore } from "../../src/updater/status.js";
-import type { SparkleBridge } from "../../src/updater/sparkle.js";
+} from "../../src/shell/updater/updater.js";
+import { createUpdaterStatusStore } from "../../src/shell/updater/status.js";
+import type { SparkleBridge } from "../../src/shell/updater/sparkle.js";
 
 function mockBridge(overrides: Partial<SparkleBridge> = {}): SparkleBridge {
   return {

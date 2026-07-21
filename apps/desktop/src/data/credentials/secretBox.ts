@@ -1,6 +1,6 @@
 import { chmodSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
-import { decryptWithKey, encryptWithKey, SecretBoxError, type MasterKeyStatus, type SecretBox } from "../../../../packages/core/src/ai/secretBox.js";
+import { decryptWithKey, encryptWithKey, SecretBoxError, type MasterKeyStatus, type SecretBox } from "../../../../../packages/core/src/ai/secretBox.js";
 export interface SafeStorageLike {
   isEncryptionAvailable(): boolean;
   encryptString(plainText: string): Buffer;

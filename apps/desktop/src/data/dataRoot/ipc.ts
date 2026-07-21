@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain } from "electron";
-import { dataRootStatus } from "../boot/env.js";
+import { dataRootStatus } from "../../boot/env.js";
 import { runResetDataRootFlow, runSelectDataRootFlow } from "./flow.js";
 import { getDataRootRestartPending } from "./restartState.js";
 

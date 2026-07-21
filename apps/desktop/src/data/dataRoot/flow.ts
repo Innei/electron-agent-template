@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { app, BrowserWindow, dialog } from "electron";
-import { dataRoot, dataRootStatus } from "../boot/env.js";
+import { dataRoot, dataRootStatus } from "../../boot/env.js";
 import { markDataRootRestartPending } from "./restartState.js";
 import { createDataRootFileStore } from "./store.js";
 import { validateDataRootCandidate } from "./validate.js";

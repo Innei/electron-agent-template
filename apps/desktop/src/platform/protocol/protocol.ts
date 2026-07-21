@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize, sep } from "node:path";
 import { app, protocol } from "electron";
-import { resolveRepoRoot } from "../boot/paths.js";
+import { resolveRepoRoot } from "../../boot/paths.js";
 
 export const APP_SCHEME = "app";
 

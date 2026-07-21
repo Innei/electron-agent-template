@@ -6,7 +6,7 @@ import {
   guardStaticPath,
   lookupMimeType,
   missingDistErrorHtml,
-} from "../../src/protocol/protocol.js";
+} from "../../src/platform/protocol/protocol.js";
 
 describe("decideRoute", () => {
   it("routes everything to static with SPA fallback applied", () => {

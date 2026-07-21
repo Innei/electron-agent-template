@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { CONTEXT_MENU_CHANNELS } from "./contextMenu/channels.js";
-import { IPC_GROUPS } from "./ipc/groups.js";
-import { TABS_COMMAND_CHANNEL, type TabsCommand } from "./tabs/channels.js";
-import { UPDATER_CHANNELS } from "./updater/channels.js";
+import { CONTEXT_MENU_CHANNELS } from "./shell/contextMenu/channels.js";
+import { IPC_GROUPS } from "./kernel/ipc/groups.js";
+import { TABS_COMMAND_CHANNEL, type TabsCommand } from "./shell/tabs/channels.js";
+import { UPDATER_CHANNELS } from "./shell/updater/channels.js";
 
 // main.ts boots one embedded kernel regardless of dev or packaged mode, so
 // both the packaged app:// page and the dev renderer (ELECTRON_DEV=1, served

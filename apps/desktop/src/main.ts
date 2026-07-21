@@ -9,27 +9,27 @@ import "./boot/env.js";
 import { existsSync } from "node:fs";
 import { app, BrowserWindow } from "electron";
 import { createServices } from "electron-ipc-decorator";
-import { createAppMenuManager } from "./menu/appMenuManager.js";
+import { createAppMenuManager } from "./shell/menu/appMenuManager.js";
 import { bootKernel } from "./boot/kernel.js";
-import { createWindow } from "./window/mainWindow.js";
-import { showFatalErrorWindow } from "./window/fatalErrorWindow.js";
-import { applyDevDockIcon } from "./window/dockIcon.js";
-import { registerAppProtocolHandler, registerAppScheme, resolveWebDistRoot } from "./protocol/protocol.js";
-import { createOnboardingStore } from "./onboarding/store.js";
-import { registerOnboardingIpc } from "./onboarding/ipc.js";
-import { runSelectDataRootFlow } from "./dataRoot/flow.js";
-import { registerDataRootIpc } from "./dataRoot/ipc.js";
+import { createWindow } from "./shell/window/mainWindow.js";
+import { showFatalErrorWindow } from "./shell/window/fatalErrorWindow.js";
+import { applyDevDockIcon } from "./shell/window/dockIcon.js";
+import { registerAppProtocolHandler, registerAppScheme, resolveWebDistRoot } from "./platform/protocol/protocol.js";
+import { createOnboardingStore } from "./shell/onboarding/store.js";
+import { registerOnboardingIpc } from "./shell/onboarding/ipc.js";
+import { runSelectDataRootFlow } from "./data/dataRoot/flow.js";
+import { registerDataRootIpc } from "./data/dataRoot/ipc.js";
 import {
   createFileLogger,
   installConsoleBridge,
   resolveMainLogPath,
-} from "./logging/fileLogger.js";
-import { installDefaultContextMenu } from "./contextMenu/defaultMenu.js";
-import { registerContextMenuIpc } from "./contextMenu/ipc.js";
-import { registerLogsIpc } from "./logging/ipc.js";
-import { sendTabsCommand } from "./tabs/commands.js";
-import { initUpdater } from "./updater/updater.js";
-import { registerUpdaterIpc } from "./updater/ipc.js";
+} from "./platform/logging/fileLogger.js";
+import { installDefaultContextMenu } from "./shell/contextMenu/defaultMenu.js";
+import { registerContextMenuIpc } from "./shell/contextMenu/ipc.js";
+import { registerLogsIpc } from "./platform/logging/ipc.js";
+import { sendTabsCommand } from "./shell/tabs/commands.js";
+import { initUpdater } from "./shell/updater/updater.js";
+import { registerUpdaterIpc } from "./shell/updater/ipc.js";
 
 const fileLogger = createFileLogger({
   logFilePath: resolveMainLogPath(app.getPath("logs")),
@@ -68,7 +68,7 @@ app.whenReady().then(async () => {
   try {
     applyDevDockIcon();
     await bootKernel();
-    const { ipcServiceClasses } = await import("./ipc/index.js");
+    const { ipcServiceClasses } = await import("./kernel/ipc/index.js");
     createServices(ipcServiceClasses);
 
     const webDistRoot = resolveWebDistRoot();

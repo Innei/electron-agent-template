@@ -1,12 +1,12 @@
 import { join } from "node:path";
 import { app, safeStorage } from "electron";
-import { createDesktopSecretBox } from "../credentials/secretBox.js";
+import { createDesktopSecretBox } from "../data/credentials/secretBox.js";
 import { IS_DEV } from "./env.js";
 
 export async function bootKernel() {
   const { initServerRuntime } = await import("../../../server/src/runtimeInit.js");
   const { createKernel } = await import("../../../server/src/bootstrap.js");
-  const { attachRealtimeBridge } = await import("../realtime/bridge.js");
+  const { attachRealtimeBridge } = await import("../kernel/realtime/bridge.js");
   const { DATA_DIR } = await import("../../../../packages/core/src/env.js");
 
   // Dev keeps the plaintext keyfile so ELECTRON_DEV workflows are

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveSparkleAddonPath, loadSparkleBridge } from "../../src/updater/sparkle.js";
+import { resolveSparkleAddonPath, loadSparkleBridge } from "../../src/shell/updater/sparkle.js";
 
 const moduleUrl = "file:///Users/x/app/desktop/dist-main/sparkle.mjs";
 

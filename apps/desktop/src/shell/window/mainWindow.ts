@@ -2,8 +2,8 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { app, BrowserWindow, shell } from "electron";
 import windowStateKeeper from "electron-window-state";
-import { resolveRepoRoot } from "../boot/paths.js";
-import { IS_DEV } from "../boot/env.js";
+import { resolveRepoRoot } from "../../boot/paths.js";
+import { IS_DEV } from "../../boot/env.js";
 import { isAllowedNavigationUrl, isExternalHttpUrl } from "./navigationGuard.js";
 
 const DEV_WEB_URL = "http://localhost:5199";
