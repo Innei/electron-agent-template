@@ -13,21 +13,39 @@ describe("bundled boot ordering", () => {
       const bootEnvIndex = content.indexOf("process.env.APP_PROJECT_ROOT = dataRoot");
       expect(bootEnvIndex).toBeGreaterThanOrEqual(0);
 
-      const envConstInMain = content.indexOf("const PROJECT_ROOT =");
+      // tsdown emitted `const`, rolldown emits `var` — accept both.
+      const rootDecl = /(?:const|var) PROJECT_ROOT =/;
+      const envConstInMain = content.search(rootDecl);
       if (envConstInMain >= 0) {
         expect(bootEnvIndex).toBeLessThan(envConstInMain);
         return;
       }
 
-      const envChunk = readdirSync(distDir).find((name) => {
-        if (!name.startsWith("env-") || !name.endsWith(".mjs")) return false;
-        return readFileSync(join(distDir, name), "utf8").includes("const PROJECT_ROOT =");
-      });
+      const chunkNames = readdirSync(distDir).filter(
+        (name) => name.endsWith(".mjs") && name !== "main.mjs",
+      );
+      const chunkContent = new Map(
+        chunkNames.map((name) => [name, readFileSync(join(distDir, name), "utf8")]),
+      );
+      const envChunk = chunkNames.find((name) => rootDecl.test(chunkContent.get(name)!));
       expect(envChunk).toBeDefined();
-      expect(content.includes(`from "./${envChunk}"`)).toBe(false);
-      const dynamicImportIndex = content.indexOf(`import("./${envChunk}")`);
-      expect(dynamicImportIndex).toBeGreaterThanOrEqual(0);
-      expect(bootEnvIndex).toBeLessThan(dynamicImportIndex);
+
+      // Static imports evaluate before main.mjs's own top-level code, so the
+      // ordering holds exactly when the env chunk is unreachable over STATIC
+      // import edges from main.mjs — dynamic-import indirection shapes are up
+      // to the bundler and irrelevant.
+      const staticImports = (source: string) =>
+        [...source.matchAll(/(?:from|import)\s+"\.\/([^"]+)"/g)].map((m) => m[1]);
+      const reachable = new Set<string>();
+      const queue = staticImports(content);
+      while (queue.length > 0) {
+        const name = queue.pop()!;
+        if (reachable.has(name)) continue;
+        reachable.add(name);
+        const source = chunkContent.get(name);
+        if (source) queue.push(...staticImports(source));
+      }
+      expect(reachable.has(envChunk!)).toBe(false);
     },
   );
 });

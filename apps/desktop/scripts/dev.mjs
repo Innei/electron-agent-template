@@ -15,16 +15,22 @@ let electron = null;
 let restarting = false;
 let shuttingDown = false;
 
-const tsdown = spawn("pnpm", ["exec", "tsdown", "--watch"], { cwd: desktopRoot, stdio: "inherit" });
-tsdown.on("exit", (code) => {
-  if (!shuttingDown) shutdown(code ?? 1);
+const watchers = ["vite.main.config.ts", "vite.preload.config.ts"].map((config) => {
+  const child = spawn("pnpm", ["exec", "vite", "build", "--watch", "-c", config], {
+    cwd: desktopRoot,
+    stdio: "inherit",
+  });
+  child.on("exit", (code) => {
+    if (!shuttingDown) shutdown(code ?? 1);
+  });
+  return child;
 });
 
 function shutdown(code) {
   if (shuttingDown) return;
   shuttingDown = true;
   electron?.kill();
-  tsdown.kill();
+  for (const child of watchers) child.kill();
   process.exit(code);
 }
 
@@ -67,9 +73,9 @@ function watchBundles() {
   }
 }
 
-// tsdown `clean: true` wipes both dist dirs on startup and the two configs
-// finish at different times, so wait until both bundles exist and have been
-// quiet for a second before launching electron or attaching watchers.
+// emptyOutDir wipes both dist dirs on startup and the two builds finish at
+// different times, so wait until both bundles exist and have been quiet for a
+// second before launching electron or attaching watchers.
 const started = Date.now();
 let lastChange = Date.now();
 let lastSignature = "";

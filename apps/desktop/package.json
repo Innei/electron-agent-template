@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist-main/main.mjs",
   "scripts": {
-    "build": "tsdown",
+    "build": "vite build -c vite.main.config.ts && vite build -c vite.preload.config.ts",
     "rebuild-native": "electron-rebuild -v 43.1.0 --force -w better-sqlite3",
     "build:native": "cd native/sparkle-bridge && npm ci && npm run build",
     "predev": "node scripts/ensureDevNative.mjs",
@@ -16,13 +16,10 @@
     "typecheck": "tsc --noEmit",
     "generate-icon": "bash scripts/generate-icon.sh",
     "prepackage": "pnpm --filter @app/web build && (test -f ../web/dist/index.html || (echo 'web/dist/index.html missing after build' && exit 1))",
-    "package": "tsdown && pnpm rebuild-native && pnpm build:native && electron-builder --mac dmg zip --arm64"
+    "package": "pnpm build && pnpm rebuild-native && pnpm build:native && electron-builder --mac dmg zip --arm64"
   },
   "dependencies": {
-    "better-sqlite3": "^12.11.1",
-    "electron-context-menu": "^4.1.2",
-    "electron-ipc-decorator": "^1.0.1",
-    "electron-window-state": "5.0.3"
+    "better-sqlite3": "^12.11.1"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.2.0",
@@ -30,8 +27,11 @@
     "@types/node": "^26.1.1",
     "electron": "43.1.0",
     "electron-builder": "^26.15.3",
-    "tsdown": "^0.22.5",
+    "electron-context-menu": "^4.1.2",
+    "electron-ipc-decorator": "^1.0.1",
+    "electron-window-state": "5.0.3",
     "typescript": "^6.0.3",
+    "vite": "^8.1.4",
     "vitest": "^4.1.10"
   }
 }
