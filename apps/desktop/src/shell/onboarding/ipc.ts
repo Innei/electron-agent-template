@@ -1,10 +1,23 @@
-import { ipcMain } from "electron";
+import { IpcMethod, IpcService } from "electron-ipc-decorator";
 import type { OnboardingStore } from "./store.js";
 
-// Same privileged-origin gate as credentials: the preload only
-// exposes desktop.onboarding to app:// (and the dev renderer), so these
-// handlers don't re-check the sender.
-export function registerOnboardingIpc(store: OnboardingStore): void {
-  ipcMain.handle("desktop:onboarding:get-state", () => store.getState());
-  ipcMain.handle("desktop:onboarding:complete", () => store.complete());
+// Same privileged-origin gate as credentials: the preload only exposes
+// rpc.invoke to app:// (and the dev renderer), so these handlers don't
+// re-check the sender.
+export class OnboardingIpc extends IpcService {
+  static readonly groupName = "onboarding";
+
+  constructor(private readonly store: OnboardingStore) {
+    super();
+  }
+
+  @IpcMethod()
+  getState() {
+    return this.store.getState();
+  }
+
+  @IpcMethod()
+  complete() {
+    return this.store.complete();
+  }
 }

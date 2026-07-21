@@ -1,3 +1,4 @@
+import { getShellRpc } from "../../features/desktop/shellRpc";
 import type {
   ElectronContextMenuPopupRequest,
   ElectronContextMenuPopupResult,
@@ -7,12 +8,13 @@ export interface DesktopContextMenuBridge {
   popup(request: ElectronContextMenuPopupRequest): Promise<ElectronContextMenuPopupResult>;
 }
 
-interface DesktopGlobal {
-  contextMenu?: DesktopContextMenuBridge;
-}
-
 export function getDesktopContextMenuBridge(
   win: unknown = typeof window === "undefined" ? undefined : window,
 ): DesktopContextMenuBridge | null {
-  return (win as { desktop?: DesktopGlobal } | undefined)?.desktop?.contextMenu ?? null;
+  const rpc = getShellRpc(win);
+  if (!rpc) return null;
+  return {
+    popup: (request) =>
+      rpc.invoke("contextMenu.popup", request) as Promise<ElectronContextMenuPopupResult>,
+  };
 }

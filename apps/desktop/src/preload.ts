@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { CONTEXT_MENU_CHANNELS } from "./shell/contextMenu/channels.js";
 import { IPC_GROUPS } from "./kernel/ipc/groups.js";
 import { TABS_COMMAND_CHANNEL, type TabsCommand } from "./shell/tabs/channels.js";
 import { UPDATER_CHANNELS } from "./shell/updater/channels.js";
@@ -44,11 +43,6 @@ if (isPrivilegedOrigin) {
     },
   };
 
-  desktopApi.onboarding = {
-    getState: () => ipcRenderer.invoke("desktop:onboarding:get-state"),
-    complete: () => ipcRenderer.invoke("desktop:onboarding:complete"),
-  };
-
   desktopApi.tabs = {
     onCommand: (cb: (command: TabsCommand) => void) => {
       const listener = (_event: Electron.IpcRendererEvent, command: TabsCommand) => cb(command);
@@ -57,31 +51,12 @@ if (isPrivilegedOrigin) {
     },
   };
 
-  desktopApi.dataRoot = {
-    get: () => ipcRenderer.invoke("desktop:data-root:get"),
-    pick: () => ipcRenderer.invoke("desktop:data-root:pick"),
-    reset: () => ipcRenderer.invoke("desktop:data-root:reset"),
-  };
-
-  desktopApi.logs = {
-    getInfo: () => ipcRenderer.invoke("desktop:logs:get-info"),
-    tail: (opts?: { maxBytes?: number }) => ipcRenderer.invoke("desktop:logs:tail", opts),
-    reveal: () => ipcRenderer.invoke("desktop:logs:reveal"),
-    openDir: () => ipcRenderer.invoke("desktop:logs:open-dir"),
-  };
-
-  desktopApi.contextMenu = {
-    popup: (request: unknown) => ipcRenderer.invoke(CONTEXT_MENU_CHANNELS.popup, request),
-  };
-
   desktopApi.updater = {
-    getStatus: () => ipcRenderer.invoke(UPDATER_CHANNELS.getStatus),
     onStatus: (cb: (status: unknown) => void) => {
       const listener = (_event: Electron.IpcRendererEvent, status: unknown) => cb(status);
       ipcRenderer.on(UPDATER_CHANNELS.status, listener);
       return () => ipcRenderer.removeListener(UPDATER_CHANNELS.status, listener);
     },
-    installNow: () => ipcRenderer.invoke(UPDATER_CHANNELS.installNow),
   };
 }
 

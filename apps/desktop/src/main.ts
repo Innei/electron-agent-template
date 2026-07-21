@@ -16,20 +16,20 @@ import { showFatalErrorWindow } from "./shell/window/fatalErrorWindow.js";
 import { applyDevDockIcon } from "./shell/window/dockIcon.js";
 import { registerAppProtocolHandler, registerAppScheme, resolveWebDistRoot } from "./platform/protocol/protocol.js";
 import { createOnboardingStore } from "./shell/onboarding/store.js";
-import { registerOnboardingIpc } from "./shell/onboarding/ipc.js";
+import { OnboardingIpc } from "./shell/onboarding/ipc.js";
 import { runSelectDataRootFlow } from "./data/dataRoot/flow.js";
-import { registerDataRootIpc } from "./data/dataRoot/ipc.js";
+import { DataRootIpc } from "./data/dataRoot/ipc.js";
 import {
   createFileLogger,
   installConsoleBridge,
   resolveMainLogPath,
 } from "./platform/logging/fileLogger.js";
 import { installDefaultContextMenu } from "./shell/contextMenu/defaultMenu.js";
-import { registerContextMenuIpc } from "./shell/contextMenu/ipc.js";
-import { registerLogsIpc } from "./platform/logging/ipc.js";
+import { ContextMenuIpc } from "./shell/contextMenu/ipc.js";
+import { LogsIpc } from "./platform/logging/ipc.js";
 import { sendTabsCommand } from "./shell/tabs/commands.js";
 import { initUpdater } from "./shell/updater/updater.js";
-import { registerUpdaterIpc } from "./shell/updater/ipc.js";
+import { UpdaterIpc } from "./shell/updater/ipc.js";
 
 const fileLogger = createFileLogger({
   logFilePath: resolveMainLogPath(app.getPath("logs")),
@@ -77,14 +77,14 @@ app.whenReady().then(async () => {
       distRootExists: () => existsSync(webDistRoot),
     });
 
-    registerOnboardingIpc(createOnboardingStore());
-    registerDataRootIpc();
-    registerLogsIpc(fileLogger);
-    registerContextMenuIpc();
+    new OnboardingIpc(createOnboardingStore());
+    new DataRootIpc();
+    new LogsIpc(fileLogger);
+    new ContextMenuIpc();
     await installDefaultContextMenu();
 
     const updater = initUpdater();
-    registerUpdaterIpc(updater);
+    new UpdaterIpc(updater);
     installAppMenu(() => updater.checkNow());
     const openMainWindow = () =>
       createWindow({

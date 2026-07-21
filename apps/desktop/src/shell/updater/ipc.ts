@@ -1,24 +1,29 @@
-import { BrowserWindow, ipcMain } from "electron";
+import { BrowserWindow } from "electron";
+import { IpcMethod, IpcService } from "electron-ipc-decorator";
 import { UPDATER_CHANNELS } from "./channels.js";
 import type { UpdaterHandle } from "./updater.js";
 import type { UpdaterUiStatus } from "./status.js";
 
-export function registerUpdaterIpc(handle: UpdaterHandle): () => void {
-  ipcMain.handle(UPDATER_CHANNELS.getStatus, (): UpdaterUiStatus => handle.getStatus());
-  ipcMain.handle(UPDATER_CHANNELS.installNow, () => {
-    handle.installNow();
-  });
+export class UpdaterIpc extends IpcService {
+  static readonly groupName = "updater";
 
-  const unsubscribe = handle.onStatus((status) => {
-    for (const win of BrowserWindow.getAllWindows()) {
-      if (win.isDestroyed()) continue;
-      win.webContents.send(UPDATER_CHANNELS.status, status);
-    }
-  });
+  constructor(private readonly updater: UpdaterHandle) {
+    super();
+    this.updater.onStatus((status) => {
+      for (const win of BrowserWindow.getAllWindows()) {
+        if (win.isDestroyed()) continue;
+        win.webContents.send(UPDATER_CHANNELS.status, status);
+      }
+    });
+  }
 
-  return () => {
-    unsubscribe();
-    ipcMain.removeHandler(UPDATER_CHANNELS.getStatus);
-    ipcMain.removeHandler(UPDATER_CHANNELS.installNow);
-  };
+  @IpcMethod()
+  getStatus(): UpdaterUiStatus {
+    return this.updater.getStatus();
+  }
+
+  @IpcMethod()
+  installNow(): void {
+    this.updater.installNow();
+  }
 }

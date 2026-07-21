@@ -1,21 +1,29 @@
-import { BrowserWindow, ipcMain } from "electron";
+import { BrowserWindow } from "electron";
+import { IpcMethod, IpcService } from "electron-ipc-decorator";
 import { dataRootStatus } from "../../boot/env.js";
 import { runResetDataRootFlow, runSelectDataRootFlow } from "./flow.js";
 import { getDataRootRestartPending } from "./restartState.js";
 
-export function registerDataRootIpc(): void {
-  ipcMain.handle("desktop:data-root:get", () => ({
-    ...dataRootStatus,
-    restartPending: getDataRootRestartPending(),
-  }));
+export class DataRootIpc extends IpcService {
+  static readonly groupName = "dataRoot";
 
-  ipcMain.handle("desktop:data-root:pick", () =>
-    runSelectDataRootFlow(BrowserWindow.getFocusedWindow()),
-  );
+  @IpcMethod()
+  get() {
+    return {
+      ...dataRootStatus,
+      restartPending: getDataRootRestartPending(),
+    };
+  }
 
-  ipcMain.handle("desktop:data-root:reset", () =>
-    runResetDataRootFlow(BrowserWindow.getFocusedWindow()),
-  );
+  @IpcMethod()
+  pick() {
+    return runSelectDataRootFlow(BrowserWindow.getFocusedWindow());
+  }
+
+  @IpcMethod()
+  reset() {
+    return runResetDataRootFlow(BrowserWindow.getFocusedWindow());
+  }
 }
 
 export { getDataRootRestartPending };
