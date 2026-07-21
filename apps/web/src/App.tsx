@@ -1,9 +1,9 @@
 import { AppSkeleton } from "./AppSkeleton";
-import { DesktopShell } from "./desktop/DesktopShell";
-import { Onboarding } from "./onboarding/Onboarding";
-import { useOnboardingGate } from "./onboarding/useOnboardingGate";
+import { DesktopShell } from "./features/desktop/DesktopShell";
+import { Onboarding } from "./features/onboarding/Onboarding";
+import { useOnboardingGate } from "./features/onboarding/useOnboardingGate";
 import { Router } from "./PageRouter";
-import { isDesktopRealtime } from "./portTransport";
+import { isDesktopRealtime } from "./lib/portTransport";
 import { ContextMenuHost, ModalHost } from "./ui";
 
 export function App() {

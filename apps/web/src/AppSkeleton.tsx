@@ -1,6 +1,6 @@
 import * as s from "./AppSkeleton.css";
 import { page } from "./styles/layout.css";
-import * as notes from "./pages/notes/notes.css";
+import * as notes from "./features/notes/notes.css";
 
 function isElectronShell(): boolean {
   return typeof navigator !== "undefined" && /\bElectron\b/.test(navigator.userAgent);

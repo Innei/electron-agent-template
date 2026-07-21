@@ -1,7 +1,7 @@
-import { AssistantChatPage } from "./pages/assistant/AssistantChatPage";
-import { LogsPage } from "./pages/logViewer/LogsPage";
-import { NotesPage } from "./pages/notes/NotesPage";
-import { SettingsPage } from "./pages/settings/SettingsPage";
+import { AssistantChatPage } from "./features/assistant/AssistantChatPage";
+import { LogsPage } from "./features/logs/LogsPage";
+import { NotesPage } from "./features/notes/NotesPage";
+import { SettingsPage } from "./features/settings/SettingsPage";
 import { routePathname, useRoute } from "./router";
 
 export function Router() {
