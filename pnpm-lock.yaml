@@ -65,13 +65,13 @@ importers:
         version: 0.80.6(ws@8.21.0)(zod@4.4.3)
       '@hono/node-server':
         specifier: 2.0.8
-        version: 2.0.8(hono@4.12.29)
+        version: 2.0.8(hono@4.12.34)
       '@tsuki-hono/common':
         specifier: 0.0.5
-        version: 0.0.5(hono@4.12.29)
+        version: 0.0.5(hono@4.12.34)
       '@tsuki-hono/core':
         specifier: 0.0.5
-        version: 0.0.5(hono@4.12.29)
+        version: 0.0.5(hono@4.12.34)
       better-sqlite3:
         specifier: ^12.11.1
         version: 12.11.1
@@ -79,8 +79,8 @@ importers:
         specifier: ^0.45.2
         version: 0.45.2(@opentelemetry/api@1.9.0)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1)
       hono:
-        specifier: 4.12.29
-        version: 4.12.29
+        specifier: 4.12.34
+        version: 4.12.34
       reflect-metadata:
         specifier: 0.2.2
         version: 0.2.2
@@ -2376,8 +2376,8 @@ packages:
   hast-util-whitespace@3.0.0:
     resolution: {integrity: sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==}
 
-  hono@4.12.29:
-    resolution: {integrity: sha512-1hNiRjawYrLq/4m3DQQjPGFg0VZkk4RjQJDff/excI6Dm9BiL75qxGrd7/c6YOxPdq6AscP3LiXhQ6fKFC1Waw==}
+  hono@4.12.34:
+    resolution: {integrity: sha512-GqXJqY/xJkJmuloTrnV1ZEXG3fqte+VjkUqoRNZXcrUidiUOP4fMSIHHY4tsqZBK++kVyWmt/AAfSUuy57/eSA==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@4.1.0:
@@ -4624,9 +4624,9 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@hono/node-server@2.0.8(hono@4.12.29)':
+  '@hono/node-server@2.0.8(hono@4.12.34)':
     dependencies:
-      hono: 4.12.29
+      hono: 4.12.34
 
   '@isaacs/fs-minipass@4.0.1':
     dependencies:
@@ -4913,18 +4913,18 @@ snapshots:
       '@types/react': 19.2.17
       '@types/react-dom': 19.2.3(@types/react@19.2.17)
 
-  '@tsuki-hono/common@0.0.5(hono@4.12.29)':
+  '@tsuki-hono/common@0.0.5(hono@4.12.34)':
     dependencies:
-      hono: 4.12.29
+      hono: 4.12.34
       picocolors: 1.1.1
       reflect-metadata: 0.2.2
       tsyringe: 4.10.0
       zod: 4.4.3
 
-  '@tsuki-hono/core@0.0.5(hono@4.12.29)':
+  '@tsuki-hono/core@0.0.5(hono@4.12.34)':
     dependencies:
-      '@tsuki-hono/common': 0.0.5(hono@4.12.29)
-      hono: 4.12.29
+      '@tsuki-hono/common': 0.0.5(hono@4.12.34)
+      hono: 4.12.34
       picocolors: 1.1.1
       reflect-metadata: 0.2.2
       tsyringe: 4.10.0
@@ -6098,7 +6098,7 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.5
 
-  hono@4.12.29: {}
+  hono@4.12.34: {}
 
   hosted-git-info@4.1.0:
     dependencies:
