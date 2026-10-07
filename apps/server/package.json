@@ -27,7 +27,7 @@
     "@tsuki-hono/core": "0.0.5",
     "better-sqlite3": "^12.11.1",
     "drizzle-orm": "^0.45.2",
-    "hono": "4.12.29",
+    "hono": "4.13.7",
     "reflect-metadata": "0.2.2",
     "tsyringe": "4.10.0",
     "ws": "^8.21.0"
